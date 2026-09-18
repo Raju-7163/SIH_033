@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Incoming Requests{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
+                Incoming Requests
+                {% if requests %}
+                    <span class="badge bg-primary rounded-pill fs-6">{{ requests|length }}</span>
+                {% endif %}
+            </h2>
+            <p class="text-muted mb-0">Manage interest from buyers for your listings.</p>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <ul class="nav nav-pills mb-4 gap-2 border-bottom pb-3" id="request-tabs">
+        <li class="nav-item">
+            <button class="nav-link active rounded-pill px-4" data-filter="all" type="button">All</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4" data-filter="pending" type="button">Pending</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4" data-filter="accepted" type="button">Accepted</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4" data-filter="rejected" type="button">Rejected</button>
+        </li>
+    </ul>
+
+    <!-- Content -->
+    <div class="requests-container">
+        {% if not requests or requests|length == 0 %}
+            <!-- Empty State -->
+            <div class="card border-0 shadow-sm rounded-4 mt-2">
+                <div class="card-body text-center py-5">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">No requests yet</h4>
+                    <p class="text-muted mb-0">When buyers show interest in your listings, their requests will appear here.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="row g-4">
+                {% for req in requests %}
+                <div class="col-12 request-card-wrapper" data-status="{{ req.status }}">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4 overflow-hidden" data-request-card="{{ req._id }}">
+                        <div class="row g-0">
+                            <!-- Left side: Buyer info & message -->
+                            <div class="col-md-7 p-4 border-end-md">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div class="avatar-circle md bg-primary-subtle text-primary fw-bold fs-5">
+                                        {{ req.buyer_name[0] | upper if req.buyer_name else 'B' }}
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-0 text-dark">{{ req.buyer_name }}</h5>
+                                        <p class="text-muted small mb-0"><i class="bi bi-telephone-fill me-1"></i>{{ req.buyer_phone | default('Contact pending') }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-light rounded-3 p-3 mb-3 position-relative">
+                                    <i class="bi bi-quote fs-3 text-muted opacity-25 position-absolute top-0 start-0 ms-2 mt-1"></i>
+                                    <p class="mb-0 text-dark ps-4 position-relative z-1 fst-italic">"{{ req.message | default('I am interested in this listing.') }}"</p>
+                                </div>
+                                
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill px-3 py-2 fw-medium">
+                                        <i class="bi bi-box me-1"></i> Requested: {{ req.quantity }} {{ req.unit | default('units') }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Right side: Listing info & Actions -->
+                            <div class="col-md-5 p-4 bg-white d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <p class="text-muted small text-uppercase fw-bold tracking-wider mb-1">For Listing</p>
+                                            <h5 class="fw-bold text-primary mb-1">{{ req.crop_name }}</h5>
+                                            <p class="text-muted small mb-0"><i class="bi bi-geo-alt-fill text-earth me-1"></i>{{ req.listing_state | default('Location N/A') }}</p>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="small text-muted">{{ req.created_at.strftime('%d %b, %H:%M') if req.created_at else 'Just now' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-auto pt-3 border-top">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="status-container">
+                                            {% if req.status == 'pending' %}
+                                                <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 border border-warning-subtle fw-medium"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                            {% elif req.status == 'accepted' %}
+                                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-3 py-2 border border-success-subtle fw-medium"><i class="bi bi-check-circle-fill me-1"></i>Accepted</span>
+                                            {% else %}
+                                                <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-3 py-2 border border-danger-subtle fw-medium"><i class="bi bi-x-circle-fill me-1"></i>Rejected</span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        {% if req.status == 'pending' %}
+                                        <div class="action-buttons d-flex gap-2">
+                                            <button class="btn btn-outline-danger action-btn rounded-pill px-3 fw-medium hover-lift" data-request-id="{{ req._id }}" data-action="rejected">
+                                                <i class="bi bi-x-lg me-1"></i> Reject
+                                            </button>
+                                            <button class="btn btn-success action-btn rounded-pill px-3 fw-medium shadow-sm hover-lift" data-request-id="{{ req._id }}" data-action="accepted">
+                                                <i class="bi bi-check-lg me-1"></i> Accept
+                                            </button>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.querySelectorAll('#request-tabs button').forEach(tab => {
+        tab.addEventListener('click', function (event) {
+            document.querySelectorAll('#request-tabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const targetId = this.getAttribute('data-filter');
+            const allCards = document.querySelectorAll('.request-card-wrapper');
+            
+            allCards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                if (targetId === 'all' || status === targetId) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+<script src="{{ url_for('static', filename='js/farmer.js') }}"></script>
+{% endblock %}

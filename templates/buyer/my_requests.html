@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}My Requests{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1 text-dark">My Requests</h2>
+        <p class="text-muted">Track the status of your inquiries sent to farmers.</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <ul class="nav nav-pills mb-4 gap-2 border-bottom pb-3" id="buyer-request-tabs">
+        <li class="nav-item">
+            <button class="nav-link active rounded-pill px-4" data-filter="all" type="button">All Requests</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4" data-filter="pending" type="button">Pending</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4" data-filter="accepted" type="button">Accepted / Deals</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4" data-filter="rejected" type="button">Rejected</button>
+        </li>
+    </ul>
+
+    <!-- Content -->
+    <div class="requests-container">
+        {% if not requests or requests|length == 0 %}
+            <!-- Empty State -->
+            <div class="card border-0 shadow-sm rounded-4 mt-2">
+                <div class="card-body text-center py-5">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                        <i class="bi bi-envelope-paper text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">No requests sent</h4>
+                    <p class="text-muted mb-4 max-w-500 mx-auto">You haven't sent any interest requests to farmers yet. Browse the marketplace to find fresh produce.</p>
+                    <a href="{{ url_for('buyer_marketplace') }}" class="btn btn-primary px-4 py-2 fw-medium shadow-sm hover-lift">
+                        <i class="bi bi-search me-2"></i> Browse Marketplace
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="row g-4">
+                {% for req in requests %}
+                <div class="col-md-6 col-xl-4 buyer-request-card" data-status="{{ req.status }}">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift overflow-hidden">
+                        <div class="card-body p-0">
+                            <!-- Top: Listing Info -->
+                            <div class="d-flex align-items-center p-3 bg-light border-bottom">
+                                <div class="rounded-3 overflow-hidden me-3 flex-shrink-0" style="width: 60px; height: 60px; background-color: #e9ecef;">
+                                    {% if req.photo_url %}
+                                        <img src="{{ req.photo_url }}" alt="Crop" class="w-100 h-100 object-fit-cover">
+                                    {% else %}
+                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted"><i class="bi bi-image"></i></div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1 min-w-0">
+                                    <h5 class="fw-bold mb-1 text-truncate">{{ req.crop_name }}</h5>
+                                    <div class="d-flex align-items-center gap-2 text-muted small">
+                                        <span><i class="bi bi-person-fill me-1"></i>{{ req.farmer_name }}</span>
+                                        <span>•</span>
+                                        <span class="text-truncate"><i class="bi bi-geo-alt-fill me-1"></i>{{ req.state | default('Location N/A') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Middle: Request Details -->
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="fw-medium text-dark"><i class="bi bi-box me-2 text-muted"></i>Requested:</span>
+                                    <span class="fw-bold">{{ req.quantity_requested }} {{ req.unit | default('units') }}</span>
+                                </div>
+                                
+                                <div class="bg-light rounded-3 p-3 mb-4 position-relative">
+                                    <small class="text-muted text-uppercase tracking-wider fw-bold d-block mb-1" style="font-size: 0.7rem;">Your Message</small>
+                                    <p class="mb-0 text-dark small fst-italic text-truncate-2">"{{ req.message | default('I am interested in buying this.') }}"</p>
+                                </div>
+                                
+                                <!-- Bottom: Status & Date -->
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <div>
+                                        {% if req.status == 'pending' %}
+                                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 border border-warning-subtle fw-medium"><i class="bi bi-hourglass-split me-1"></i>Pending Review</span>
+                                        {% elif req.status == 'accepted' %}
+                                            <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-3 py-2 border border-success-subtle fw-medium"><i class="bi bi-check-circle-fill me-1"></i>Deal Accepted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-3 py-2 border border-danger-subtle fw-medium"><i class="bi bi-x-circle-fill me-1"></i>Rejected</span>
+                                        {% endif %}
+                                    </div>
+                                    <span class="small text-muted">{{ req.created_at.strftime('%d %b %Y') if req.created_at else 'Recent' }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Info (only if accepted) -->
+                            {% if req.status == 'accepted' %}
+                            <div class="bg-success-subtle p-3 border-top border-success-subtle d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2 text-success-emphasis small fw-medium">
+                                    <i class="bi bi-telephone-fill"></i> Farmer Contact
+                                </div>
+                                <span class="badge bg-success shadow-sm px-3 py-2">Check Messages</span>
+                            </div>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.querySelectorAll('#buyer-request-tabs button').forEach(tab => {
+        tab.addEventListener('click', function (event) {
+            document.querySelectorAll('#buyer-request-tabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const targetId = this.getAttribute('data-filter');
+            const allCards = document.querySelectorAll('.buyer-request-card');
+            
+            allCards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                if (targetId === 'all' || status === targetId) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

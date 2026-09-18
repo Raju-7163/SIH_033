@@ -1,0 +1,155 @@
+import bcrypt
+from datetime import datetime
+from pymongo import MongoClient
+import config
+
+def seed_database():
+    """Seeds the MongoDB database with initial farmers, buyers, listings, requests, and notifications.
+    Idempotent — checks if data already exists before inserting anything."""
+    print("Connecting to MongoDB for seeding...")
+    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000)
+    try:
+        db = client.get_default_database()   # Uses DB name from URI
+    except Exception:
+        db = client['agriconnect']           # Fallback
+
+    # Check if database is already seeded (idempotent)
+    if db.users.count_documents({}) > 0:
+        print(f"Database '{db.name}' already seeded ({db.users.count_documents({})} users). Skipping.")
+        return
+
+    print(f"Seeding database '{db.name}' with demo data...")
+
+    # Helper function to hash passwords
+    def hash_pwd(password):
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # --- Seed Users ---
+    farmers_data = [
+        {"name": "Ramesh Kumar", "email": "ramesh@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Maharashtra", "district": "Nashik", "phone": "9876543210"},
+        {"name": "Gurpreet Singh", "email": "gurpreet@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Punjab", "district": "Ludhiana", "phone": "9876543211"},
+        {"name": "Suresh Yadav", "email": "suresh@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Uttar Pradesh", "district": "Agra", "phone": "9876543212"},
+        {"name": "Manjunath Reddy", "email": "manjunath@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Karnataka", "district": "Belgaum", "phone": "9876543213"},
+        {"name": "Priya Sharma", "email": "priya@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Rajasthan", "district": "Jaipur", "phone": "9876543214"},
+        {"name": "Mohan Das", "email": "mohan@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "West Bengal", "district": "Murshidabad", "phone": "9876543215"},
+        {"name": "Kavitha Nair", "email": "kavitha@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Kerala", "district": "Thrissur", "phone": "9876543216"},
+        {"name": "Amit Patel", "email": "amit@farmer.com", "password": hash_pwd("farmer123"), "role": "farmer", "state": "Gujarat", "district": "Surat", "phone": "9876543217"},
+    ]
+    
+    buyers_data = [
+        {"name": "FreshMart Delhi", "email": "buyer1@buyer.com", "password": hash_pwd("buyer123"), "role": "buyer", "state": "Delhi", "district": "New Delhi", "phone": "9876500001"},
+        {"name": "Raj Wholesale", "email": "buyer2@buyer.com", "password": hash_pwd("buyer123"), "role": "buyer", "state": "Maharashtra", "district": "Mumbai", "phone": "9876500002"},
+    ]
+
+    farmer_ids = {}
+    for f in farmers_data:
+        res = db.users.insert_one(f)
+        farmer_ids[f['name'].split()[0]] = res.inserted_id
+
+    buyer_ids = {}
+    for b in buyers_data:
+        res = db.users.insert_one(b)
+        buyer_ids[b['email'].split('@')[0]] = res.inserted_id
+
+    # --- Seed Listings ---
+    photos = {
+        "Tomato": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400",
+        "Onion": "https://images.unsplash.com/photo-1620574387735-3624d75b2dbc?w=400",
+        "Wheat": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400",
+        "Rice": "https://images.unsplash.com/photo-1586201375761-83865001e8ac?w=400",
+        "Potato": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400",
+        "Cotton": "https://images.unsplash.com/photo-1592153594892-0b44585141e9?w=400",
+        "Sugarcane": "https://images.unsplash.com/photo-1631584024344-93ff53906a29?w=400",
+        "Mango": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=400",
+        "Maize": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400",
+        "Soybean": "https://images.unsplash.com/photo-1601646271927-4a001fb33f78?w=400",
+        "Mustard": "https://images.unsplash.com/photo-1508595165502-3e2652e5a405?w=400",
+        "Jute": "https://images.unsplash.com/photo-1533604017686-3534b07fb884?w=400",
+        "Banana": "https://images.unsplash.com/photo-1571501679680-a94f6f264be4?w=400",
+        "Coconut": "https://images.unsplash.com/photo-1526614180703-827d23e7c8f2?w=400",
+        "Groundnut": "https://images.unsplash.com/photo-1588667623910-53cc8f5379dd?w=400"
+    }
+
+    now = datetime.now()
+    listings_data = [
+        {"farmer": "Ramesh", "crop": "Tomato", "qty": 500, "unit": "kg", "price": 18, "state": "Maharashtra", "district": "Nashik", "lat": 20.0059, "lng": 73.7898},
+        {"farmer": "Ramesh", "crop": "Onion", "qty": 1000, "unit": "kg", "price": 14, "state": "Maharashtra", "district": "Nashik", "lat": 20.0059, "lng": 73.7898},
+        {"farmer": "Gurpreet", "crop": "Wheat", "qty": 2000, "unit": "kg", "price": 22, "state": "Punjab", "district": "Ludhiana", "lat": 30.9010, "lng": 75.8573},
+        {"farmer": "Gurpreet", "crop": "Rice", "qty": 1500, "unit": "kg", "price": 35, "state": "Punjab", "district": "Amritsar", "lat": 31.6340, "lng": 74.8723},
+        {"farmer": "Suresh", "crop": "Potato", "qty": 800, "unit": "kg", "price": 12, "state": "Uttar Pradesh", "district": "Agra", "lat": 27.1767, "lng": 78.0081},
+        {"farmer": "Suresh", "crop": "Sugarcane", "qty": 5000, "unit": "kg", "price": 4, "state": "Uttar Pradesh", "district": "Lucknow", "lat": 26.8467, "lng": 80.9462},
+        {"farmer": "Manjunath", "crop": "Cotton", "qty": 600, "unit": "kg", "price": 58, "state": "Karnataka", "district": "Belgaum", "lat": 15.8497, "lng": 74.4977},
+        {"farmer": "Priya", "crop": "Mustard", "qty": 400, "unit": "kg", "price": 48, "state": "Rajasthan", "district": "Jaipur", "lat": 26.9124, "lng": 75.7873},
+        {"farmer": "Priya", "crop": "Mango", "qty": 300, "unit": "kg", "price": 65, "state": "Rajasthan", "district": "Jaipur", "lat": 26.9124, "lng": 75.7873},
+        {"farmer": "Mohan", "crop": "Rice", "qty": 2000, "unit": "kg", "price": 32, "state": "West Bengal", "district": "Murshidabad", "lat": 24.1800, "lng": 88.2700},
+        {"farmer": "Mohan", "crop": "Jute", "qty": 1200, "unit": "kg", "price": 28, "state": "West Bengal", "district": "Kolkata", "lat": 22.5726, "lng": 88.3639},
+        {"farmer": "Kavitha", "crop": "Banana", "qty": 700, "unit": "kg", "price": 22, "state": "Kerala", "district": "Thrissur", "lat": 10.5276, "lng": 76.2144},
+        {"farmer": "Kavitha", "crop": "Coconut", "qty": 2000, "unit": "pc", "price": 20, "state": "Kerala", "district": "Thrissur", "lat": 10.5276, "lng": 76.2144},
+        {"farmer": "Amit", "crop": "Cotton", "qty": 900, "unit": "kg", "price": 55, "state": "Gujarat", "district": "Surat", "lat": 21.1702, "lng": 72.8311},
+        {"farmer": "Amit", "crop": "Groundnut", "qty": 500, "unit": "kg", "price": 45, "state": "Gujarat", "district": "Rajkot", "lat": 22.3039, "lng": 70.8022},
+        {"farmer": "Gurpreet", "crop": "Maize", "qty": 1800, "unit": "kg", "price": 20, "state": "Punjab", "district": "Ludhiana", "lat": 30.9010, "lng": 75.8573},
+        {"farmer": "Suresh", "crop": "Wheat", "qty": 1000, "unit": "kg", "price": 21, "state": "Uttar Pradesh", "district": "Mathura", "lat": 27.4924, "lng": 77.6737},
+        {"farmer": "Ramesh", "crop": "Soybean", "qty": 600, "unit": "kg", "price": 42, "state": "Maharashtra", "district": "Nashik", "lat": 20.0059, "lng": 73.7898},
+    ]
+
+    listing_ids = []
+    for l in listings_data:
+        listing = {
+            "farmer_id": farmer_ids[l["farmer"]],
+            "crop_name": l["crop"],
+            "quantity": l["qty"],
+            "unit": l["unit"],
+            "price_per_unit": l["price"],
+            "harvest_date": now,
+            "state": l["state"],
+            "district": l["district"],
+            "lat": l["lat"],
+            "lng": l["lng"],
+            "photo_url": photos.get(l["crop"], photos["Tomato"]),
+            "status": "active",
+            "created_at": now
+        }
+        res = db.listings.insert_one(listing)
+        listing_ids.append(res.inserted_id)
+
+    # --- Seed Requests ---
+    requests_data = [
+        {"buyer": "buyer1", "listing_idx": 2, "qty": 500, "msg": "We need wheat for our bakery chain. Can you arrange weekly supply?", "status": "pending"},
+        {"buyer": "buyer1", "listing_idx": 0, "qty": 200, "msg": "Fresh tomatoes needed for restaurant chain in Delhi.", "status": "pending"},
+        {"buyer": "buyer2", "listing_idx": 6, "qty": 300, "msg": "Looking for high-quality cotton for textile unit.", "status": "accepted"},
+        {"buyer": "buyer2", "listing_idx": 4, "qty": 400, "msg": "Bulk potato purchase for chips manufacturing plant.", "status": "pending"},
+    ]
+
+    for req in requests_data:
+        l_id = listing_ids[req["listing_idx"]]
+        # Fetch listing to get farmer_id
+        listing = db.listings.find_one({"_id": l_id})
+        request_doc = {
+            "buyer_id": buyer_ids[req["buyer"]],
+            "farmer_id": listing["farmer_id"],
+            "listing_id": l_id,
+            "quantity_requested": req["qty"],
+            "message": req["msg"],
+            "status": req["status"],
+            "created_at": now
+        }
+        db.requests.insert_one(request_doc)
+
+    # --- Seed Notifications ---
+    notifications_data = [
+        {"user_id": buyer_ids["buyer1"], "message": "Your interest in Gurpreet's Wheat listing has been received.", "status": "unread"},
+        {"user_id": buyer_ids["buyer1"], "message": "New crop listing: Mango from Rajasthan now available!", "status": "unread"},
+        {"user_id": farmer_ids["Ramesh"], "message": "FreshMart Delhi sent a request for your Tomato listing.", "status": "unread"},
+        {"user_id": farmer_ids["Gurpreet"], "message": "FreshMart Delhi sent a request for your Wheat listing.", "status": "unread"},
+        {"user_id": farmer_ids["Ramesh"], "message": "Your listing 'Soybean 600kg' is live on the marketplace.", "status": "read"},
+        {"user_id": buyer_ids["buyer2"], "message": "Your request for Manjunath's Cotton has been accepted!", "status": "unread"},
+    ]
+
+    for notif in notifications_data:
+        notif["created_at"] = now
+        db.notifications.insert_one(notif)
+
+    print("Seeding completed successfully!")
+
+if __name__ == "__main__":
+    seed_database()

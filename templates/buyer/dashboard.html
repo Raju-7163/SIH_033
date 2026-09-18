@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Buyer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-1 text-dark">Welcome back, {{ session.name }}! 🛒</h2>
+            <p class="text-muted mb-0"><i class="bi bi-calendar-event me-2"></i>{{ current_date | default('Today') }}</p>
+        </div>
+        <a href="{{ url_for('buyer_marketplace') }}" class="btn btn-primary shadow-sm hover-lift px-4 py-2 fw-medium">
+            <i class="bi bi-search me-2"></i>Find Produce
+        </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift bg-primary text-white position-relative overflow-hidden">
+                <div class="position-absolute opacity-10 top-0 end-0 m-2 mt-n3 me-n3">
+                    <i class="bi bi-send-fill" style="font-size: 8rem;"></i>
+                </div>
+                <div class="card-body p-4 position-relative z-1">
+                    <p class="fw-medium mb-1 opacity-75">Requests Sent</p>
+                    <h2 class="fw-bold mb-0 display-5">{{ analytics.requests_sent | default('0') }}</h2>
+                    <div class="mt-3">
+                        <a href="{{ url_for('buyer_my_requests') }}" class="text-white text-decoration-none small fw-medium">View all <i class="bi bi-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift bg-earth text-white position-relative overflow-hidden">
+                <div class="position-absolute opacity-10 top-0 end-0 m-2 mt-n3 me-n3">
+                    <i class="bi bi-bookmark-heart-fill" style="font-size: 8rem;"></i>
+                </div>
+                <div class="card-body p-4 position-relative z-1">
+                    <p class="fw-medium mb-1 opacity-75">Saved Listings</p>
+                    <h2 class="fw-bold mb-0 display-5">{{ analytics.saved_listings | default('0') }}</h2>
+                    <div class="mt-3">
+                        <a href="{{ url_for('buyer_saved') }}" class="text-white text-decoration-none small fw-medium">View all <i class="bi bi-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift bg-accent text-white position-relative overflow-hidden">
+                <div class="position-absolute opacity-10 top-0 end-0 m-2 mt-n3 me-n3">
+                    <i class="bi bi-handshake-fill" style="font-size: 8rem;"></i>
+                </div>
+                <div class="card-body p-4 position-relative z-1">
+                    <p class="fw-medium mb-1 opacity-75">Active Deals</p>
+                    <h2 class="fw-bold mb-0 display-5">{{ analytics.active_deals | default('0') }}</h2>
+                    <div class="mt-3">
+                        <a href="{{ url_for('buyer_my_requests') }}" class="text-white text-decoration-none small fw-medium">Manage deals <i class="bi bi-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Requests -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Recent Requests</h5>
+                    <a href="{{ url_for('buyer_my_requests') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View All</a>
+                </div>
+                <div class="card-body p-4">
+                    {% if recent_requests and recent_requests|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="border-0 rounded-start">Crop</th>
+                                    <th class="border-0">Farmer</th>
+                                    <th class="border-0">Quantity</th>
+                                    <th class="border-0">Date</th>
+                                    <th class="border-0 rounded-end">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for req in recent_requests[:5] %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold text-dark">{{ req.crop_name }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="avatar-circle xs bg-light text-dark fw-bold border">{{ req.farmer_name[0] | upper if req.farmer_name else 'F' }}</div>
+                                            <span class="text-muted">{{ req.farmer_name }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ req.quantity }}</td>
+                                    <td class="text-muted small">{{ req.created_at.strftime('%d %b %Y') if req.created_at else 'Recent' }}</td>
+                                    <td>
+                                        {% if req.status == 'pending' %}
+                                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1">Pending</span>
+                                        {% elif req.status == 'accepted' %}
+                                            <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2 py-1">Accepted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2 py-1">Rejected</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox fs-1 text-muted opacity-50 mb-3 d-block"></i>
+                        <h6 class="fw-bold text-dark">No requests sent yet</h6>
+                        <p class="text-muted small">Browse the marketplace and contact farmers to start making deals.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Browse CTA -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden position-relative bg-light">
+                <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=500&q=80" class="card-img h-100 object-fit-cover opacity-25 position-absolute" alt="Marketplace">
+                <div class="card-body p-4 position-relative z-1 d-flex flex-column justify-content-center text-center h-100">
+                    <div class="bg-white rounded-circle p-4 mx-auto mb-4 shadow-sm text-primary d-inline-flex" style="width: 80px; height: 80px;">
+                        <i class="bi bi-shop fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Discover Fresh Produce</h4>
+                    <p class="text-muted mb-4">Connect directly with farmers across India for the best quality and prices.</p>
+                    <a href="{{ url_for('buyer_marketplace') }}" class="btn btn-primary fw-bold shadow-sm hover-lift py-2">
+                        Browse Marketplace
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

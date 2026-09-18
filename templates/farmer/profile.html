@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1 text-dark">My Profile</h2>
+        <p class="text-muted">Manage your personal information and account settings.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Profile Card -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 text-center overflow-hidden position-relative h-100">
+                <!-- Cover Image -->
+                <div class="bg-primary" style="height: 120px; background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);"></div>
+                
+                <div class="card-body px-4 pb-4 position-relative pt-0">
+                    <!-- Avatar -->
+                    <div class="avatar-circle xl bg-white text-primary border border-4 border-white shadow-sm mx-auto fw-bold" style="width: 100px; height: 100px; font-size: 2.5rem; margin-top: -50px; z-index: 2; position: relative;">
+                        {{ session.get('name', 'U')[0] | upper }}
+                    </div>
+                    
+                    <h4 class="fw-bold text-dark mt-3 mb-1">{{ session.get('name', 'User Name') }}</h4>
+                    <div class="mb-3">
+                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-3 py-2 fw-medium border border-success-subtle">
+                            <i class="bi bi-tree-fill me-1"></i> Farmer
+                        </span>
+                    </div>
+                    
+                    <hr class="text-muted opacity-25 mb-4">
+                    
+                    <ul class="list-unstyled d-flex flex-column gap-3 text-start mb-0">
+                        <li class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle p-2 text-muted"><i class="bi bi-envelope"></i></div>
+                            <div>
+                                <small class="text-muted d-block mb-1">Email Address</small>
+                                <span class="fw-medium text-dark">{{ session.get('email', 'email@example.com') }}</span>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle p-2 text-muted"><i class="bi bi-telephone"></i></div>
+                            <div>
+                                <small class="text-muted d-block mb-1">Phone Number</small>
+                                <span class="fw-medium text-dark">{{ session.get('phone', '+91 9876543210') }}</span>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle p-2 text-muted"><i class="bi bi-geo-alt"></i></div>
+                            <div>
+                                <small class="text-muted d-block mb-1">Location</small>
+                                <span class="fw-medium text-dark">{{ session.get('district', 'District') }}, {{ session.get('state', 'State') }}</span>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle p-2 text-muted"><i class="bi bi-calendar3"></i></div>
+                            <div>
+                                <small class="text-muted d-block mb-1">Joined Date</small>
+                                <span class="fw-medium text-dark">Member since 2024</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Edit Form -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                    <h5 class="fw-bold mb-0">Edit Profile Details</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('farmer_profile') }}" method="POST">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium text-dark">Full Name</label>
+                                <input type="text" name="name" class="form-control bg-light" value="{{ session.get('name', '') }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium text-dark">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted border-end-0">+91</span>
+                                    <input type="tel" name="phone" class="form-control bg-light border-start-0 ps-0" value="{{ session.get('phone', '') }}" required pattern="[0-9]{10}">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium text-dark">State</label>
+                                <select name="state" class="form-select bg-light" required>
+                                    {% set current_state = session.get('state', '') %}
+                                    <option value="Maharashtra" {% if current_state == 'Maharashtra' %}selected{% endif %}>Maharashtra</option>
+                                    <option value="Punjab" {% if current_state == 'Punjab' %}selected{% endif %}>Punjab</option>
+                                    <option value="Uttar Pradesh" {% if current_state == 'Uttar Pradesh' %}selected{% endif %}>Uttar Pradesh</option>
+                                    <option value="Karnataka" {% if current_state == 'Karnataka' %}selected{% endif %}>Karnataka</option>
+                                    <option value="Rajasthan" {% if current_state == 'Rajasthan' %}selected{% endif %}>Rajasthan</option>
+                                    <option value="West Bengal" {% if current_state == 'West Bengal' %}selected{% endif %}>West Bengal</option>
+                                    <option value="Kerala" {% if current_state == 'Kerala' %}selected{% endif %}>Kerala</option>
+                                    <option value="Gujarat" {% if current_state == 'Gujarat' %}selected{% endif %}>Gujarat</option>
+                                    <option value="Madhya Pradesh" {% if current_state == 'Madhya Pradesh' %}selected{% endif %}>Madhya Pradesh</option>
+                                    <option value="Haryana" {% if current_state == 'Haryana' %}selected{% endif %}>Haryana</option>
+                                    <option value="Bihar" {% if current_state == 'Bihar' %}selected{% endif %}>Bihar</option>
+                                    <option value="Tamil Nadu" {% if current_state == 'Tamil Nadu' %}selected{% endif %}>Tamil Nadu</option>
+                                    <option value="Andhra Pradesh" {% if current_state == 'Andhra Pradesh' %}selected{% endif %}>Andhra Pradesh</option>
+                                    <option value="Telangana" {% if current_state == 'Telangana' %}selected{% endif %}>Telangana</option>
+                                    <option value="Odisha" {% if current_state == 'Odisha' %}selected{% endif %}>Odisha</option>
+                                    <option value="Assam" {% if current_state == 'Assam' %}selected{% endif %}>Assam</option>
+                                    <option value="Delhi" {% if current_state == 'Delhi' %}selected{% endif %}>Delhi</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium text-dark">District</label>
+                                <input type="text" name="district" class="form-control bg-light" value="{{ session.get('district', '') }}" required>
+                            </div>
+                            
+                            <div class="col-12 mt-5">
+                                <button type="submit" class="btn btn-primary px-4 py-2 fw-bold shadow-sm hover-lift">
+                                    <i class="bi bi-save me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

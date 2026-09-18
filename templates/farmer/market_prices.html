@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Market Prices{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1 text-dark">Market Prices Tracker</h2>
+        <p class="text-muted">Compare live mandi prices to ensure you list at a fair price.</p>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4 bg-light rounded-4">
+            <form action="{{ url_for('farmer_market_prices') }}" method="GET" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-medium text-dark">Select Crop</label>
+                    <select name="crop" class="form-select border-0 shadow-sm">
+                        {% set selected_crop = crop %}
+                        {% for c in ['Wheat','Rice','Maize','Sugarcane','Cotton','Soybean','Mustard','Groundnut','Onion','Potato','Tomato','Mango','Banana','Coconut','Jute'] %}
+                        <option value="{{ c }}" {% if selected_crop == c %}selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-medium text-dark">Select State</label>
+                    <select name="state" class="form-select border-0 shadow-sm">
+                        {% set selected_state = state %}
+                        {% for s in ['Maharashtra','Punjab','Uttar Pradesh','Karnataka','Rajasthan','West Bengal','Kerala','Gujarat','Madhya Pradesh','Haryana','Bihar','Tamil Nadu','Andhra Pradesh','Telangana','Odisha','Assam','Delhi'] %}
+                        <option value="{{ s }}" {% if selected_state == s %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100 shadow-sm fw-medium">
+                        <i class="bi bi-search me-2"></i>Fetch Prices
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if market_data %}
+    <div class="row g-4">
+        <!-- Summary card — market_data is a Python dict {labels, prices, avg_price} -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4 d-flex flex-column text-center pt-5">
+                    <div class="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3"
+                         style="width:80px;height:80px;">
+                        <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">{{ crop }}</h4>
+                    <p class="text-muted mb-4">{{ state }}</p>
+
+                    <div class="bg-light rounded-4 p-4 mb-4">
+                        <p class="text-muted mb-1 small fw-medium text-uppercase">Avg. Mandi Price</p>
+                        <h2 class="fw-bold text-dark mb-0">
+                            ₹{{ market_data.avg_price }}
+                            <span class="fs-6 text-muted fw-normal">/ quintal</span>
+                        </h2>
+                    </div>
+
+                    <div class="alert alert-success d-flex align-items-center mb-0 text-start" role="alert">
+                        <i class="bi bi-check-circle-fill me-3 fs-5"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Suggested Fair Price</h6>
+                            <p class="mb-0 small">List 5–10% above average for best results.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar chart card -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                    <h5 class="fw-bold mb-0">Modal Prices by Market — {{ crop }}</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container w-100 position-relative" style="height:350px;">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                    <p class="text-muted small text-center mt-3 mb-0">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Data from Agmarknet / data.gov.in — bundled fallback used if API unavailable
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Prompt state: shown before first search -->
+    <div class="card border-0 shadow-sm rounded-4 text-center py-5 mt-2">
+        <div class="card-body">
+            <div class="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:80px;height:80px;">
+                <i class="bi bi-bar-chart-fill fs-1 text-success"></i>
+            </div>
+            <h5 class="fw-bold text-dark">Select a Crop and State above</h5>
+            <p class="text-muted">View live mandi prices and get a fair price suggestion instantly.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% if market_data %}
+<script>
+    // Pass the market_data Python dict directly to Chart.js via tojson filter
+    window.marketData = {{ market_data | tojson }};
+</script>
+{% endif %}
+<script src="{{ url_for('static', filename='js/farmer.js') }}"></script>
+{% endblock %}

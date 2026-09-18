@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-1 text-dark">Good morning, {{ session.name }}! 👋</h2>
+            <p class="text-muted mb-0"><i class="bi bi-calendar-event me-2"></i>{{ current_date | default('Today') }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('farmer_add_listing') }}" class="btn btn-primary shadow-sm hover-lift">
+                <i class="bi bi-plus-lg me-2"></i>Add New Listing
+            </a>
+            <a href="{{ url_for('farmer_market_prices') }}" class="btn btn-outline-secondary shadow-sm hover-lift">
+                <i class="bi bi-graph-up me-2"></i>Market Prices
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted fw-medium mb-1">Total Listings</p>
+                            <h3 class="fw-bold mb-0 text-dark">{{ analytics.total_listings | default('0') }}</h3>
+                        </div>
+                        <div class="bg-success-subtle text-success rounded-circle p-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-box-seam fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted fw-medium mb-1">Requests Received</p>
+                            <h3 class="fw-bold mb-0 text-dark">{{ analytics.requests_received | default('0') }}</h3>
+                        </div>
+                        <div class="bg-warning-subtle text-warning rounded-circle p-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-inbox fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted fw-medium mb-1">Active Listings</p>
+                            <h3 class="fw-bold mb-0 text-dark">{{ analytics.active_listings | default('0') }}</h3>
+                        </div>
+                        <div class="bg-primary-subtle text-primary rounded-circle p-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-check-circle fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted fw-medium mb-1">Est. Revenue</p>
+                            <h3 class="fw-bold mb-0 text-dark">₹{{ analytics.est_revenue | default('0') }}</h3>
+                        </div>
+                        <div class="bg-info-subtle text-info rounded-circle p-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-currency-rupee fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Chart -->
+        <div class="col-lg-7 col-xl-8">
+            <div class="dashboard-card card border-0 shadow-sm rounded-4 h-100 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Activity Overview - Last 6 Months</h5>
+                </div>
+                <div class="chart-container w-100 position-relative" style="height:300px;">
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Requests -->
+        <div class="col-lg-5 col-xl-4">
+            <div class="dashboard-card card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Recent Requests</h5>
+                    <a href="{{ url_for('farmer_requests') }}" class="text-primary text-decoration-none small fw-medium">View All</a>
+                </div>
+                <div class="card-body p-0 mt-3">
+                    {% if analytics.recent_requests and analytics.recent_requests|length > 0 %}
+                        <div class="list-group list-group-flush">
+                            {% for req in analytics.recent_requests[:5] %}
+                            <div class="list-group-item border-0 py-3 px-4 hover-bg-light transition-all border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-circle sm bg-light text-dark fw-bold border">
+                                            {{ req.buyer_name[0] | upper if req.buyer_name else 'B' }}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">{{ req.buyer_name }}</h6>
+                                            <small class="text-muted">{{ req.crop_name }} • {{ req.quantity }}</small>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {% if req.status == 'pending' %}
+                                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1">Pending</span>
+                                        {% elif req.status == 'accepted' %}
+                                            <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2 py-1">Accepted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2 py-1">Rejected</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5 px-4 h-100 d-flex flex-column justify-content-center">
+                            <i class="bi bi-inbox text-muted fs-1 mb-3 opacity-50"></i>
+                            <h6 class="fw-medium text-dark">No requests yet</h6>
+                            <p class="text-muted small mb-0">When buyers show interest in your listings, they will appear here.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data injection for chart
+    window.monthlyData = {{ analytics.monthly_data | default('{}') | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/farmer.js') }}"></script>
+{% endblock %}

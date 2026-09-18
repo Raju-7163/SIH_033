@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}My Listings{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 text-dark">My Listings</h2>
+            <p class="text-muted mb-0">Manage your produce available for sale</p>
+        </div>
+        <a href="{{ url_for('farmer_add_listing') }}" class="btn btn-primary shadow-sm hover-lift">
+            <i class="bi bi-plus-lg me-2"></i>Add New Listing
+        </a>
+    </div>
+
+    {% if not listings or listings|length == 0 %}
+        <!-- Empty State -->
+        <div class="card border-0 shadow-sm rounded-4 mt-4">
+            <div class="card-body text-center py-5">
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                    <i class="bi bi-box-seam text-muted" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">No listings found</h4>
+                <p class="text-muted mb-4 max-w-500 mx-auto">You haven't added any produce to the marketplace yet. Create your first listing to start connecting with buyers.</p>
+                <a href="{{ url_for('farmer_add_listing') }}" class="btn btn-primary px-4 py-2 fw-medium shadow-sm hover-lift">
+                    <i class="bi bi-plus-lg me-2"></i>Create First Listing
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <!-- Listings Grid -->
+        <div class="row g-4">
+            {% for listing in listings %}
+            <div class="col-sm-6 col-lg-4 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift overflow-hidden position-relative">
+                    
+                    <!-- Status Badge -->
+                    <div class="position-absolute top-0 end-0 m-3 z-1">
+                        {% if listing.status == 'active' %}
+                            <span class="badge bg-success shadow-sm rounded-pill px-3 py-2 fw-medium">Active</span>
+                        {% elif listing.status == 'sold' %}
+                            <span class="badge bg-secondary shadow-sm rounded-pill px-3 py-2 fw-medium">Sold Out</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark shadow-sm rounded-pill px-3 py-2 fw-medium">Pending</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Image -->
+                    <div class="ratio ratio-4x3 bg-light position-relative">
+                        {% if listing.photo_url %}
+                            <img src="{{ listing.photo_url }}" class="card-img-top object-fit-cover" alt="{{ listing.crop_name }}" onerror="this.src='https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=400&q=80'">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center w-100 h-100 text-muted">
+                                <i class="bi bi-image fs-1 opacity-50"></i>
+                            </div>
+                        {% endif %}
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                            <h5 class="fw-bold text-white mb-0">{{ listing.crop_name }}</h5>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fs-4 fw-bold text-primary">₹{{ listing.price_per_unit }}</span>
+                                <span class="text-muted small">per {{ listing.unit }}</span>
+                            </div>
+                            <div class="d-flex align-items-center text-dark mb-1">
+                                <i class="bi bi-box me-2 text-muted"></i>
+                                <span class="fw-medium">Quantity: </span>
+                                <span class="ms-1">{{ listing.quantity }} {{ listing.unit }}</span>
+                            </div>
+                            <div class="d-flex align-items-center text-dark">
+                                <i class="bi bi-geo-alt me-2 text-muted"></i>
+                                <span class="text-truncate">{{ listing.district }}, {{ listing.state }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                            <div class="small text-muted">
+                                <i class="bi bi-calendar3 me-1"></i> Harvest: {{ listing.harvest_date.strftime('%d %b %Y') if listing.harvest_date else 'N/A' }}
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-light border text-secondary hover-primary transition-all" title="Edit Listing">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-light border text-danger hover-danger transition-all" title="Delete Listing">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

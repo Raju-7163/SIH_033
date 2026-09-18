@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Listing{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1 text-dark">Add New Listing</h2>
+        <p class="text-muted">List your harvest on the marketplace to connect with buyers.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-4 p-md-5">
+            <form action="{{ url_for('farmer_add_listing') }}" method="POST" enctype="multipart/form-data">
+                
+                <h5 class="fw-bold mb-4 text-primary border-bottom pb-2">Crop Details</h5>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Crop Name <span class="text-danger">*</span></label>
+                        <select name="crop_name" class="form-select bg-light" required>
+                            <option value="" disabled selected>Select a crop...</option>
+                            <option value="Wheat">Wheat</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Maize">Maize</option>
+                            <option value="Sugarcane">Sugarcane</option>
+                            <option value="Cotton">Cotton</option>
+                            <option value="Soybean">Soybean</option>
+                            <option value="Mustard">Mustard</option>
+                            <option value="Groundnut">Groundnut</option>
+                            <option value="Onion">Onion</option>
+                            <option value="Potato">Potato</option>
+                            <option value="Tomato">Tomato</option>
+                            <option value="Mango">Mango</option>
+                            <option value="Banana">Banana</option>
+                            <option value="Coconut">Coconut</option>
+                            <option value="Jute">Jute</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Harvest Date</label>
+                        <input type="date" name="harvest_date" class="form-control bg-light">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Quantity <span class="text-danger">*</span></label>
+                        <input type="number" name="quantity" class="form-control bg-light" min="1" step="0.1" required placeholder="e.g. 50">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Unit <span class="text-danger">*</span></label>
+                        <select name="unit" class="form-select bg-light" required>
+                            <option value="kg">Kilograms (kg)</option>
+                            <option value="quintal" selected>Quintals</option>
+                            <option value="tonne">Tonnes</option>
+                            <option value="piece">Pieces</option>
+                            <option value="dozen">Dozens</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Price per Unit (₹) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-end-0">₹</span>
+                            <input type="number" name="price_per_unit" class="form-control bg-light border-start-0 ps-0" min="1" required placeholder="e.g. 2100">
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-4 text-primary border-bottom pb-2">Location Information</h5>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">State <span class="text-danger">*</span></label>
+                        <input type="text" name="state" class="form-control bg-light" required value="{{ session.get('state', '') }}">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">District <span class="text-danger">*</span></label>
+                        <input type="text" name="district" class="form-control bg-light" required value="{{ session.get('district', '') }}">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium d-flex justify-content-between">
+                            <span>Latitude</span>
+                            <span class="text-muted small fw-normal">Optional for map pin</span>
+                        </label>
+                        <input type="number" name="lat" class="form-control bg-light" step="0.0001" placeholder="e.g. 20.0059">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium d-flex justify-content-between">
+                            <span>Longitude</span>
+                            <span class="text-muted small fw-normal">Optional for map pin</span>
+                        </label>
+                        <input type="number" name="lng" class="form-control bg-light" step="0.0001" placeholder="e.g. 73.7898">
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-4 text-primary border-bottom pb-2">Additional Details</h5>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-12">
+                        <label class="form-label fw-medium">Crop Photo</label>
+                        <div class="d-flex flex-column flex-md-row gap-4 align-items-start">
+                            <div class="flex-grow-1 w-100">
+                                <input class="form-control bg-light" type="file" id="photo-input" name="photo" accept="image/*">
+                                <div class="form-text">Clear photos increase buyer trust. Max size 5MB.</div>
+                            </div>
+                            <div class="border rounded-3 p-2 bg-light d-flex align-items-center justify-content-center flex-shrink-0" style="width: 150px; height: 150px;">
+                                <img id="photo-preview" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain;">
+                                <i id="photo-placeholder" class="bi bi-camera text-muted opacity-50" style="font-size: 3rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-medium">Description</label>
+                        <textarea name="description" class="form-control bg-light" rows="4" placeholder="Describe the quality, variety, and any other relevant details about your crop..."></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                    <a href="{{ url_for('farmer_listings') }}" class="btn btn-light border px-4 py-2 fw-medium">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold shadow-sm hover-lift">
+                        <i class="bi bi-check2-circle me-2"></i> List My Produce
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('photo-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById('photo-preview').src = e.target.result;
+      document.getElementById('photo-preview').style.display = 'block';
+      document.getElementById('photo-placeholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    document.getElementById('photo-preview').style.display = 'none';
+    document.getElementById('photo-placeholder').style.display = 'block';
+  }
+});
+</script>
+{% endblock %}

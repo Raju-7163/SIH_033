@@ -1,0 +1,155 @@
+{
+  "crops": {
+    "tomato": {
+      "avg_price_per_kg": 16,
+      "markets": [
+        {"market": "Nashik", "state": "Maharashtra", "modal_price": 1450},
+        {"market": "Pune", "state": "Maharashtra", "modal_price": 1600},
+        {"market": "Bangalore", "state": "Karnataka", "modal_price": 1800},
+        {"market": "Delhi", "state": "Delhi", "modal_price": 2100},
+        {"market": "Chennai", "state": "Tamil Nadu", "modal_price": 1950}
+      ]
+    },
+    "onion": {
+      "avg_price_per_kg": 20,
+      "markets": [
+        {"market": "Lasalgaon", "state": "Maharashtra", "modal_price": 1800},
+        {"market": "Nashik", "state": "Maharashtra", "modal_price": 1750},
+        {"market": "Pune", "state": "Maharashtra", "modal_price": 2000},
+        {"market": "Delhi", "state": "Delhi", "modal_price": 2400},
+        {"market": "Ahmedabad", "state": "Gujarat", "modal_price": 2100}
+      ]
+    },
+    "wheat": {
+      "avg_price_per_kg": 23,
+      "markets": [
+        {"market": "Ludhiana", "state": "Punjab", "modal_price": 2150},
+        {"market": "Amritsar", "state": "Punjab", "modal_price": 2200},
+        {"market": "Karnal", "state": "Haryana", "modal_price": 2180},
+        {"market": "Agra", "state": "Uttar Pradesh", "modal_price": 2100},
+        {"market": "Jaipur", "state": "Rajasthan", "modal_price": 2120}
+      ]
+    },
+    "rice": {
+      "avg_price_per_kg": 33,
+      "markets": [
+        {"market": "Amritsar", "state": "Punjab", "modal_price": 3200},
+        {"market": "Patna", "state": "Bihar", "modal_price": 3100},
+        {"market": "Murshidabad", "state": "West Bengal", "modal_price": 3000},
+        {"market": "Bhubaneswar", "state": "Odisha", "modal_price": 3300},
+        {"market": "Hyderabad", "state": "Telangana", "modal_price": 3400}
+      ]
+    },
+    "potato": {
+      "avg_price_per_kg": 15,
+      "markets": [
+        {"market": "Agra", "state": "Uttar Pradesh", "modal_price": 1200},
+        {"market": "Aligarh", "state": "Uttar Pradesh", "modal_price": 1150},
+        {"market": "Kolkata", "state": "West Bengal", "modal_price": 1400},
+        {"market": "Delhi", "state": "Delhi", "modal_price": 1600},
+        {"market": "Indore", "state": "Madhya Pradesh", "modal_price": 1350}
+      ]
+    },
+    "cotton": {
+      "avg_price_per_kg": 60,
+      "markets": [
+        {"market": "Belgaum", "state": "Karnataka", "modal_price": 5800},
+        {"market": "Akola", "state": "Maharashtra", "modal_price": 6200},
+        {"market": "Rajkot", "state": "Gujarat", "modal_price": 6000},
+        {"market": "Nanded", "state": "Maharashtra", "modal_price": 5900},
+        {"market": "Adilabad", "state": "Telangana", "modal_price": 6100}
+      ]
+    },
+    "sugarcane": {
+      "avg_price_per_kg": 3.5,
+      "markets": [
+        {"market": "Lucknow", "state": "Uttar Pradesh", "modal_price": 340},
+        {"market": "Meerut", "state": "Uttar Pradesh", "modal_price": 350},
+        {"market": "Pune", "state": "Maharashtra", "modal_price": 360},
+        {"market": "Kolhapur", "state": "Maharashtra", "modal_price": 355},
+        {"market": "Bellary", "state": "Karnataka", "modal_price": 330}
+      ]
+    },
+    "maize": {
+      "avg_price_per_kg": 20,
+      "markets": [
+        {"market": "Ludhiana", "state": "Punjab", "modal_price": 1900},
+        {"market": "Davangere", "state": "Karnataka", "modal_price": 2050},
+        {"market": "Nizamabad", "state": "Telangana", "modal_price": 1950},
+        {"market": "Dhule", "state": "Maharashtra", "modal_price": 1850},
+        {"market": "Haveri", "state": "Karnataka", "modal_price": 2000}
+      ]
+    },
+    "mango": {
+      "avg_price_per_kg": 60,
+      "markets": [
+        {"market": "Ratnagiri", "state": "Maharashtra", "modal_price": 5000},
+        {"market": "Lucknow", "state": "Uttar Pradesh", "modal_price": 4500},
+        {"market": "Krishnagiri", "state": "Tamil Nadu", "modal_price": 5500},
+        {"market": "Chittoor", "state": "Andhra Pradesh", "modal_price": 5200},
+        {"market": "Jaipur", "state": "Rajasthan", "modal_price": 6000}
+      ]
+    },
+    "soybean": {
+      "avg_price_per_kg": 40,
+      "markets": [
+        {"market": "Indore", "state": "Madhya Pradesh", "modal_price": 4200},
+        {"market": "Nagpur", "state": "Maharashtra", "modal_price": 4100},
+        {"market": "Nashik", "state": "Maharashtra", "modal_price": 4000},
+        {"market": "Aurangabad", "state": "Maharashtra", "modal_price": 4150},
+        {"market": "Latur", "state": "Maharashtra", "modal_price": 4050}
+      ]
+    },
+    "mustard": {
+      "avg_price_per_kg": 50,
+      "markets": [
+        {"market": "Jaipur", "state": "Rajasthan", "modal_price": 5000},
+        {"market": "Alwar", "state": "Rajasthan", "modal_price": 4800},
+        {"market": "Bharatpur", "state": "Rajasthan", "modal_price": 4900},
+        {"market": "Agra", "state": "Uttar Pradesh", "modal_price": 5100},
+        {"market": "Mathura", "state": "Uttar Pradesh", "modal_price": 4950}
+      ]
+    },
+    "groundnut": {
+      "avg_price_per_kg": 48,
+      "markets": [
+        {"market": "Rajkot", "state": "Gujarat", "modal_price": 4700},
+        {"market": "Junagadh", "state": "Gujarat", "modal_price": 4600},
+        {"market": "Kurnool", "state": "Andhra Pradesh", "modal_price": 5000},
+        {"market": "Anantapur", "state": "Andhra Pradesh", "modal_price": 4900},
+        {"market": "Bidar", "state": "Karnataka", "modal_price": 4800}
+      ]
+    },
+    "banana": {
+      "avg_price_per_kg": 20,
+      "markets": [
+        {"market": "Thrissur", "state": "Kerala", "modal_price": 1800},
+        {"market": "Ernakulam", "state": "Kerala", "modal_price": 2000},
+        {"market": "Coimbatore", "state": "Tamil Nadu", "modal_price": 1900},
+        {"market": "Bangalore", "state": "Karnataka", "modal_price": 2200},
+        {"market": "Anand", "state": "Gujarat", "modal_price": 1700}
+      ]
+    },
+    "jute": {
+      "avg_price_per_kg": 30,
+      "markets": [
+        {"market": "Murshidabad", "state": "West Bengal", "modal_price": 2800},
+        {"market": "Kolkata", "state": "West Bengal", "modal_price": 3200},
+        {"market": "Dhubri", "state": "Assam", "modal_price": 2900},
+        {"market": "Patna", "state": "Bihar", "modal_price": 2750},
+        {"market": "Purnea", "state": "Bihar", "modal_price": 2850}
+      ]
+    },
+    "coconut": {
+      "avg_price_per_kg": 18,
+      "markets": [
+        {"market": "Thrissur", "state": "Kerala", "modal_price": 1600},
+        {"market": "Ernakulam", "state": "Kerala", "modal_price": 1800},
+        {"market": "Coimbatore", "state": "Tamil Nadu", "modal_price": 1900},
+        {"market": "Tumkur", "state": "Karnataka", "modal_price": 1750},
+        {"market": "Pollachi", "state": "Tamil Nadu", "modal_price": 1850}
+      ]
+    }
+  },
+  "last_updated": "2024-11-01"
+}
