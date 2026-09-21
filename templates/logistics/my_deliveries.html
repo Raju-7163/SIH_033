@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}My Deliveries{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-1">My Deliveries</h2>
+        <p class="text-muted mb-0">Track and update the status of your claimed deliveries.</p>
+    </div>
+    <a href="{{ url_for('logistics_available') }}" class="btn btn-outline-primary rounded-pill fw-medium px-4">
+        <i class="bi bi-plus-circle me-1"></i> Find More
+    </a>
+</div>
+
+{% if orders %}
+<div class="d-flex flex-column gap-4">
+{% for o in orders %}
+    <!-- Delivery status card -->
+    <div class="card border-0 shadow-sm rounded-4 p-4" id="delivery-{{ o._id }}">
+        <div class="row align-items-center g-3">
+            <!-- Crop & Value -->
+            <div class="col-md-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-success-subtle rounded-3 p-3">
+                        <i class="bi bi-bag-check fs-3 text-success"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-1">{{ o.crop_name }}</h5>
+                        <p class="text-muted small mb-0">{{ o.quantity }} kg &bull; ₹{{ o.total_amount }}</p>
+                        {% if o.created_at %}
+                            <p class="text-muted" style="font-size:0.72rem;">{{ o.created_at.strftime('%d %b %Y') }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route & Map -->
+            <div class="col-md-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="text-center w-50">
+                        <div class="bg-warning-subtle rounded-2 px-2 py-1 mb-1">
+                            <span class="fw-bold small text-warning">From</span>
+                        </div>
+                        <p class="small text-dark mb-0 fw-medium text-truncate">{{ o.pickup_district }}</p>
+                        <p class="text-muted text-truncate" style="font-size:0.75rem;">{{ o.pickup_state }}</p>
+                    </div>
+                    <i class="bi bi-arrow-right text-muted mx-1"></i>
+                    <div class="text-center w-50">
+                        <div class="bg-success-subtle rounded-2 px-2 py-1 mb-1">
+                            <span class="fw-bold small text-success">To</span>
+                        </div>
+                        <p class="small text-dark mb-0 fw-medium text-truncate">{{ o.drop_district }}</p>
+                        <p class="text-muted text-truncate" style="font-size:0.75rem;">{{ o.drop_state }}</p>
+                    </div>
+                </div>
+                <!-- Map container -->
+                <div class="border rounded-3 bg-light overflow-hidden position-relative map-container-{{ o._id }}" 
+                     style="height: 120px;"
+                     data-id="{{ o._id }}"
+                     data-plat="{{ o.pickup_lat or '' }}" data-plng="{{ o.pickup_lng or '' }}"
+                     data-dlat="{{ o.drop_lat or '' }}" data-dlng="{{ o.drop_lng or '' }}">
+                     {% if not (o.pickup_lat and o.pickup_lng) or not (o.drop_lat and o.drop_lng) %}
+                        <div class="position-absolute w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted" style="background: rgba(248,249,250,0.9); z-index: 2;">
+                            <i class="bi bi-map fs-3 mb-1 opacity-50"></i>
+                            <span class="small fw-medium">Exact locations pending</span>
+                        </div>
+                     {% endif %}
+                     <div id="map-{{ o._id }}" style="height: 100%; width: 100%;"></div>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-md-3">
+                <div class="bg-light rounded-3 p-3 small h-100 d-flex flex-column justify-content-center">
+                    <p class="mb-1 fw-bold text-dark"><i class="bi bi-tree me-1 text-success"></i>{{ o.farmer_name }}</p>
+                    <p class="mb-2 text-truncate"><a href="tel:{{ o.farmer_phone }}" class="text-primary text-decoration-none">{{ o.farmer_phone }}</a></p>
+                    <p class="mb-1 fw-bold text-dark"><i class="bi bi-shop me-1 text-primary"></i>{{ o.buyer_name }}</p>
+                    <p class="mb-0 text-truncate"><a href="tel:{{ o.buyer_phone }}" class="text-primary text-decoration-none">{{ o.buyer_phone }}</a></p>
+                </div>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="col-md-3">
+                <div class="h-100 d-flex flex-column justify-content-center">
+                    <p class="fw-bold small text-uppercase text-muted mb-2">Delivery Status</p>
+                    <select class="form-select rounded-pill border-primary fw-medium"
+                            id="status-select-{{ o._id }}"
+                            onchange="updateStatus('{{ o._id }}', this.value)">
+                        <option value="picked_up"  {% if o.delivery_status == 'picked_up'  %}selected{% endif %}>📦 Picked Up</option>
+                        <option value="in_transit" {% if o.delivery_status == 'in_transit' %}selected{% endif %}>🚛 In Transit</option>
+                        <option value="delivered"  {% if o.delivery_status == 'delivered'  %}selected{% endif %}>✅ Delivered</option>
+                    </select>
+                    <div id="status-spinner-{{ o._id }}" class="d-none text-center mt-2">
+                        <span class="spinner-border spinner-border-sm text-primary"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% else %}
+<div class="card border-0 shadow-sm rounded-4 text-center py-5">
+    <div class="card-body">
+        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+            <i class="bi bi-truck text-muted fs-1"></i>
+        </div>
+        <h5 class="fw-bold text-dark">No deliveries yet</h5>
+        <p class="text-muted">Head to Available Deliveries to accept your first assignment.</p>
+        <a href="{{ url_for('logistics_available') }}" class="btn btn-primary rounded-pill px-4 fw-medium">Browse Available</a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize mini maps for each order card if coordinates exist
+    document.querySelectorAll('[class*="map-container-"]').forEach(container => {
+        const id = container.dataset.id;
+        const plat = parseFloat(container.dataset.plat);
+        const plng = parseFloat(container.dataset.plng);
+        const dlat = parseFloat(container.dataset.dlat);
+        const dlng = parseFloat(container.dataset.dlng);
+
+        if (!isNaN(plat) && !isNaN(plng)) {
+            const map = L.map('map-' + id, {
+                zoomControl: false,
+                dragging: false,
+                scrollWheelZoom: false
+            });
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            
+            const pMarker = L.marker([plat, plng], {title: "Pickup"}).addTo(map);
+            let bounds = L.latLngBounds([[plat, plng]]);
+            
+            if (!isNaN(dlat) && !isNaN(dlng)) {
+                const dMarker = L.marker([dlat, dlng], {title: "Drop"}).addTo(map);
+                bounds.extend([dlat, dlng]);
+                
+                // Draw route line
+                L.polyline([[plat, plng], [dlat, dlng]], {color: '#2d6a4f', weight: 3, dashArray: '5, 5'}).addTo(map);
+            }
+            
+            map.fitBounds(bounds, {padding: [10, 10]});
+        }
+    });
+});
+
+function updateStatus(orderId, status) {
+    const spinner = document.getElementById('status-spinner-' + orderId);
+    const select  = document.getElementById('status-select-' + orderId);
+    select.disabled = true;
+    spinner.classList.remove('d-none');
+
+    fetch('/logistics/update-delivery-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: orderId, status: status })
+    })
+    .then(r => r.json().then(data => ({ ok: r.ok, data })))
+    .then(({ ok, data }) => {
+        spinner.classList.add('d-none');
+        select.disabled = false;
+        if (ok && data.success) {
+            showToast('Delivery status updated!', 'success');
+        } else {
+            showToast(data.message || 'Failed to update status.', 'error');
+        }
+    })
+    .catch(err => {
+        spinner.classList.add('d-none');
+        select.disabled = false;
+        showToast('Network error. Please try again.', 'error');
+    });
+}
+</script>
+{% endblock %}
+

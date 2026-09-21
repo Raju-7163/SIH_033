@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Logistics Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="bg-info-subtle rounded-circle p-3 d-flex align-items-center justify-content-center" style="width:60px;height:60px;">
+                    <i class="bi bi-truck fs-3 text-info"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">My Profile</h3>
+                    <p class="text-muted small mb-0">Logistics Partner</p>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}{% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}{% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fw-medium">Full Name</label>
+                        <input type="text" class="form-control bg-light" name="name" value="{{ user.name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Email</label>
+                        <input type="email" class="form-control bg-light" value="{{ user.email }}" disabled>
+                        <div class="form-text text-muted">Email cannot be changed.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Phone Number</label>
+                        <input type="tel" class="form-control bg-light" name="phone" value="{{ user.get('phone', '') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">State</label>
+                        <input type="text" class="form-control bg-light" name="state" value="{{ user.get('state', '') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">District</label>
+                        <input type="text" class="form-control bg-light" name="district" value="{{ user.get('district', '') }}">
+                    </div>
+
+                    <!-- Aadhaar — shown masked if present, never editable -->
+                    {% if user.get('aadhaar_last4') %}
+                    <div class="col-12">
+                        <label class="form-label fw-medium">Aadhaar (KYC)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-success-subtle text-success border-0">
+                                <i class="bi bi-shield-check"></i>
+                            </span>
+                            <input type="text" class="form-control bg-light"
+                                   value="XXXX-XXXX-{{ user.aadhaar_last4 }}" disabled>
+                        </div>
+                        <div class="form-text text-muted">KYC verified. Full Aadhaar number is never stored.</div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary px-5 fw-bold mt-4 rounded-pill shadow-sm">
+                    <i class="bi bi-check-circle me-2"></i>Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

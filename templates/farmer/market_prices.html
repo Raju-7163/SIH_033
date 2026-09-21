@@ -42,51 +42,53 @@
     </div>
 
     {% if market_data %}
-    <div class="row g-4">
-        <!-- Summary card — market_data is a Python dict {labels, prices, avg_price} -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4 d-flex flex-column text-center pt-5">
-                    <div class="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3"
-                         style="width:80px;height:80px;">
-                        <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+    <div class="row g-4 justify-content-center">
+        <!-- Clear Pricing Display (No confusing graphs) -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-header bg-success text-white border-0 py-3 px-4 d-flex align-items-center">
+                    <i class="bi bi-tag-fill fs-4 me-3"></i>
+                    <div>
+                        <h4 class="fw-bold mb-0 text-white">Current Market Rates</h4>
+                        <p class="mb-0 small opacity-75">{{ crop }} in {{ state }}</p>
                     </div>
-                    <h4 class="fw-bold mb-1">{{ crop }}</h4>
-                    <p class="text-muted mb-4">{{ state }}</p>
-
-                    <div class="bg-light rounded-4 p-4 mb-4">
-                        <p class="text-muted mb-1 small fw-medium text-uppercase">Avg. Mandi Price</p>
-                        <h2 class="fw-bold text-dark mb-0">
-                            ₹{{ market_data.avg_price }}
-                            <span class="fs-6 text-muted fw-normal">/ quintal</span>
-                        </h2>
-                    </div>
-
-                    <div class="alert alert-success d-flex align-items-center mb-0 text-start" role="alert">
-                        <i class="bi bi-check-circle-fill me-3 fs-5"></i>
-                        <div>
-                            <h6 class="fw-bold mb-0">Suggested Fair Price</h6>
-                            <p class="mb-0 small">List 5–10% above average for best results.</p>
+                </div>
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <p class="text-muted text-center mb-5 fs-5">Below are the average selling prices. Use these to set a fair price for your listing.</p>
+                    
+                    <div class="row g-4 text-center">
+                        <!-- 1 kg -->
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-4 border border-2 border-light bg-light hover-lift">
+                                <p class="text-muted text-uppercase fw-bold tracking-wider mb-2 small">Price per 1 kg</p>
+                                <h1 class="fw-bold text-success mb-0 display-5">₹{{ (market_data.avg_price / 100)|round(1) }}</h1>
+                            </div>
+                        </div>
+                        
+                        <!-- 1 quintal -->
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-4 border border-2 border-success bg-success-subtle hover-lift position-relative shadow-sm">
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-success px-3 py-2 shadow-sm">Standard</span>
+                                <p class="text-success-emphasis text-uppercase fw-bold tracking-wider mb-2 small mt-2">Price per 1 Quintal<br><span class="opacity-75" style="font-size:0.7rem;">(100 kg)</span></p>
+                                <h1 class="fw-bold text-success mb-0 display-5">₹{{ market_data.avg_price }}</h1>
+                            </div>
+                        </div>
+                        
+                        <!-- 1 tonne -->
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-4 border border-2 border-light bg-light hover-lift">
+                                <p class="text-muted text-uppercase fw-bold tracking-wider mb-2 small">Price per 1 Tonne<br><span class="opacity-75" style="font-size:0.7rem;">(1,000 kg)</span></p>
+                                <h1 class="fw-bold text-success mb-0 display-5">₹{{ (market_data.avg_price * 10)|round }}</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bar chart card -->
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
-                    <h5 class="fw-bold mb-0">Modal Prices by Market — {{ crop }}</h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="chart-container w-100 position-relative" style="height:350px;">
-                        <canvas id="marketChart"></canvas>
+                    
+                    <div class="alert alert-info mt-5 mb-0 d-flex align-items-center rounded-3 border-0 bg-info-subtle text-info-emphasis">
+                        <i class="bi bi-info-circle-fill fs-3 me-3"></i>
+                        <div>
+                            <strong>Tip:</strong> If your produce is of very high quality, you can list it at a price slightly above these rates.
+                        </div>
                     </div>
-                    <p class="text-muted small text-center mt-3 mb-0">
-                        <i class="bi bi-info-circle me-1"></i>
-                        Data from Agmarknet / data.gov.in — bundled fallback used if API unavailable
-                    </p>
                 </div>
             </div>
         </div>
@@ -98,10 +100,10 @@
         <div class="card-body">
             <div class="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                  style="width:80px;height:80px;">
-                <i class="bi bi-bar-chart-fill fs-1 text-success"></i>
+                <i class="bi bi-search text-success fs-1"></i>
             </div>
-            <h5 class="fw-bold text-dark">Select a Crop and State above</h5>
-            <p class="text-muted">View live mandi prices and get a fair price suggestion instantly.</p>
+            <h4 class="fw-bold text-dark mb-2">Check Prices</h4>
+            <p class="text-muted mb-0">Select a crop and state above to see current market rates.</p>
         </div>
     </div>
     {% endif %}

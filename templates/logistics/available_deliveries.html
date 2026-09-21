@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Available Deliveries{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-1">Available Deliveries</h2>
+        <p class="text-muted mb-0">Paid orders awaiting a logistics partner — accept to claim.</p>
+    </div>
+    <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3 py-2 fw-medium fs-6">
+        {{ orders|length }} available
+    </span>
+</div>
+
+{% if orders %}
+    <div class="row g-4">
+    {% for o in orders %}
+        <div class="col-12">
+            <!-- Each available delivery card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4" id="order-card-{{ o._id }}">
+                <div class="row align-items-center g-3">
+                    <!-- Crop & Quantity -->
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-success-subtle rounded-3 p-3">
+                                <i class="bi bi-bag-check fs-3 text-success"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{{ o.crop_name }}</h5>
+                                <p class="text-muted small mb-0">{{ o.quantity }} kg &bull; ₹{{ o.total_amount }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Route: Pickup → Drop -->
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <div class="text-center w-50">
+                                <div class="bg-warning-subtle rounded-2 px-2 py-1 mb-1">
+                                    <i class="bi bi-arrow-up-circle text-warning me-1"></i>
+                                    <span class="fw-bold small">Pickup</span>
+                                </div>
+                                <p class="small text-dark mb-0 fw-medium text-truncate">{{ o.pickup_district }}</p>
+                                <p class="text-muted text-truncate" style="font-size: 0.75rem;">{{ o.pickup_state }}</p>
+                            </div>
+                            <i class="bi bi-arrow-right text-muted mx-1 fs-5"></i>
+                            <div class="text-center w-50">
+                                <div class="bg-success-subtle rounded-2 px-2 py-1 mb-1">
+                                    <i class="bi bi-arrow-down-circle text-success me-1"></i>
+                                    <span class="fw-bold small">Drop</span>
+                                </div>
+                                <p class="small text-dark mb-0 fw-medium text-truncate">{{ o.drop_district }}</p>
+                                <p class="text-muted text-truncate" style="font-size: 0.75rem;">{{ o.drop_state }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Map container (only initialized if we have lat/lng or fallback to text display) -->
+                        <div class="border rounded-3 bg-light overflow-hidden position-relative map-container-{{ o._id }}" 
+                             style="height: 120px;"
+                             data-id="{{ o._id }}"
+                             data-plat="{{ o.pickup_lat or '' }}" data-plng="{{ o.pickup_lng or '' }}"
+                             data-dlat="{{ o.drop_lat or '' }}" data-dlng="{{ o.drop_lng or '' }}">
+                             {% if not (o.pickup_lat and o.pickup_lng) or not (o.drop_lat and o.drop_lng) %}
+                                <div class="position-absolute w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted" style="background: rgba(248,249,250,0.9); z-index: 2;">
+                                    <i class="bi bi-map fs-3 mb-1 opacity-50"></i>
+                                    <span class="small fw-medium">Exact locations pending</span>
+                                </div>
+                             {% endif %}
+                             <div id="map-{{ o._id }}" style="height: 100%; width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Details (visible to logistics for coordination) -->
+                    <div class="col-md-3">
+                        <div class="bg-light rounded-3 p-3 small h-100 d-flex flex-column justify-content-center">
+                            <p class="mb-1 fw-bold text-dark"><i class="bi bi-tree me-1 text-success"></i>Farmer</p>
+                            <p class="mb-1 text-truncate">{{ o.farmer_name }} &bull; <a href="tel:{{ o.farmer_phone }}" class="text-primary text-decoration-none">{{ o.farmer_phone }}</a></p>
+                            <hr class="my-2">
+                            <p class="mb-1 fw-bold text-dark"><i class="bi bi-shop me-1 text-primary"></i>Buyer</p>
+                            <p class="mb-0 text-truncate">{{ o.buyer_name }} &bull; <a href="tel:{{ o.buyer_phone }}" class="text-primary text-decoration-none">{{ o.buyer_phone }}</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Accept Button -->
+                    <div class="col-md-2 text-end">
+                        <button class="btn btn-primary fw-bold px-4 rounded-pill shadow-sm w-100 h-100"
+                                onclick="acceptDelivery('{{ o._id }}')"
+                                id="accept-btn-{{ o._id }}" style="min-height: 80px;">
+                            <i class="bi bi-truck me-1 d-block mb-1 fs-4"></i> Accept
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <div class="card border-0 shadow-sm rounded-4 text-center py-5">
+        <div class="card-body">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+                <i class="bi bi-box-seam text-muted fs-1"></i>
+            </div>
+            <h5 class="fw-bold text-dark">No deliveries available right now</h5>
+            <p class="text-muted">Check back soon — new paid orders will appear here automatically.</p>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize mini maps for each order card if coordinates exist
+    document.querySelectorAll('[class*="map-container-"]').forEach(container => {
+        const id = container.dataset.id;
+        const plat = parseFloat(container.dataset.plat);
+        const plng = parseFloat(container.dataset.plng);
+        const dlat = parseFloat(container.dataset.dlat);
+        const dlng = parseFloat(container.dataset.dlng);
+
+        if (!isNaN(plat) && !isNaN(plng)) {
+            const map = L.map('map-' + id, {
+                zoomControl: false,
+                dragging: false,
+                scrollWheelZoom: false
+            });
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            
+            const pMarker = L.marker([plat, plng], {title: "Pickup"}).addTo(map);
+            let bounds = L.latLngBounds([[plat, plng]]);
+            
+            if (!isNaN(dlat) && !isNaN(dlng)) {
+                const dMarker = L.marker([dlat, dlng], {title: "Drop"}).addTo(map);
+                bounds.extend([dlat, dlng]);
+                
+                // Draw route line
+                L.polyline([[plat, plng], [dlat, dlng]], {color: '#2d6a4f', weight: 3, dashArray: '5, 5'}).addTo(map);
+            }
+            
+            map.fitBounds(bounds, {padding: [10, 10]});
+        }
+    });
+});
+
+function acceptDelivery(orderId) {
+    const btn = document.getElementById('accept-btn-' + orderId);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm mb-1 d-block mx-auto"></span> Claiming...';
+
+    fetch('/logistics/accept-delivery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: orderId })
+    })
+    .then(r => r.json().then(data => ({ ok: r.ok, data })))
+    .then(({ ok, data }) => {
+        if (ok && data.success) {
+            showToast('Delivery accepted! Check My Deliveries.', 'success');
+            // Remove card from available list
+            const card = document.getElementById('order-card-' + orderId);
+            if (card) card.closest('.col-12').remove();
+        } else {
+            showToast(data.message || 'Failed to accept delivery.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-truck me-1 d-block mb-1 fs-4"></i> Accept';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        showToast('Network error. Please try again.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-truck me-1 d-block mb-1 fs-4"></i> Accept';
+    });
+}
+</script>
+{% endblock %}
+

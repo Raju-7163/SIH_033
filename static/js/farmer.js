@@ -117,26 +117,51 @@ function handleRequestAction(requestId, action) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ request_id: requestId, action: action })
   })
-  .then(r => r.json())
-  .then(data => {
-    if (data.success) {
+  .then(r => {
+    // Always parse JSON — backend now always returns JSON, even on errors
+    return r.json().then(data => ({ ok: r.ok, data }));
+  })
+  .then(({ ok, data }) => {
+    if (ok && data.success) {
       showToast(`Request ${action} successfully!`, 'success');
-      // Update UI
+
+      // Update the status badge in-place on the card
       const card = document.querySelector(`[data-request-card="${requestId}"]`);
       if (card) {
-        const badge = card.querySelector('.request-status-badge');
-        badge.className = `badge request-status-badge bg-${action === 'accepted' ? 'success' : 'danger'}`;
-        badge.textContent = action.charAt(0).toUpperCase() + action.slice(1);
-        card.querySelectorAll('.action-btn').forEach(b => b.remove());
+        // Find and update the status badge (inside .status-container)
+        const statusContainer = card.querySelector('.status-container');
+        if (statusContainer) {
+          const isAccepted = action === 'accepted';
+          statusContainer.innerHTML = isAccepted
+            ? `<span class="badge bg-success-subtle text-success-emphasis rounded-pill px-3 py-2 border border-success-subtle fw-medium"><i class="bi bi-check-circle-fill me-1"></i>Accepted</span>`
+            : `<span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-3 py-2 border border-danger-subtle fw-medium"><i class="bi bi-x-circle-fill me-1"></i>Rejected</span>`;
+        }
+        // Remove the accept/reject buttons
+        const actionBtns = card.querySelector('.action-buttons');
+        if (actionBtns) actionBtns.remove();
       }
     } else {
-      showToast('Action failed. Please try again.', 'error');
-      if (btn) { btn.disabled = false; btn.innerHTML = action === 'accepted' ? 'Accept' : 'Reject'; }
+      const msg = (data && data.message) ? data.message : 'Action failed. Please try again.';
+      showToast(msg, 'error');
+      // Re-enable the button
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = action === 'accepted'
+          ? '<i class="bi bi-check-lg me-1"></i> Accept'
+          : '<i class="bi bi-x-lg me-1"></i> Reject';
+      }
     }
   })
-  .catch(() => {
-    showToast('Network error. Please try again.', 'error');
-    if (btn) { btn.disabled = false; }
+  .catch(err => {
+    // Only fires on genuine network failures (offline, CORS, etc.)
+    console.error('Request action network error:', err);
+    showToast('Network error. Please check your connection.', 'error');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = action === 'accepted'
+        ? '<i class="bi bi-check-lg me-1"></i> Accept'
+        : '<i class="bi bi-x-lg me-1"></i> Reject';
+    }
   });
 }
 

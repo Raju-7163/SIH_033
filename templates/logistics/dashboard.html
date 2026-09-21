@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Logistics Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-1">Logistics Dashboard</h2>
+        <p class="text-muted mb-0">Welcome back, {{ session.name }}!</p>
+    </div>
+    <a href="{{ url_for('logistics_available') }}" class="btn btn-primary fw-medium px-4 rounded-pill shadow-sm">
+        <i class="bi bi-box-seam me-2"></i> View Available Deliveries
+    </a>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="dashboard-card card border-0 shadow-sm rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-info-subtle rounded-3 p-3">
+                    <i class="bi bi-box-seam fs-3 text-info"></i>
+                </div>
+                <div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">Available</p>
+                    <h2 class="fw-bold mb-0 text-dark">{{ total_available }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="dashboard-card card border-0 shadow-sm rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary-subtle rounded-3 p-3">
+                    <i class="bi bi-truck fs-3 text-primary"></i>
+                </div>
+                <div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">My Deliveries</p>
+                    <h2 class="fw-bold mb-0 text-dark">{{ my_total }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="dashboard-card card border-0 shadow-sm rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-warning-subtle rounded-3 p-3">
+                    <i class="bi bi-arrow-repeat fs-3 text-warning"></i>
+                </div>
+                <div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">In Transit</p>
+                    <h2 class="fw-bold mb-0 text-dark">{{ in_transit }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="dashboard-card card border-0 shadow-sm rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-success-subtle rounded-3 p-3">
+                    <i class="bi bi-check-circle fs-3 text-success"></i>
+                </div>
+                <div>
+                    <p class="text-muted small mb-1 text-uppercase fw-bold">Delivered</p>
+                    <h2 class="fw-bold mb-0 text-dark">{{ delivered }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick links -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <i class="bi bi-box-seam fs-2 text-info"></i>
+                <h5 class="fw-bold mb-0">Available Deliveries</h5>
+            </div>
+            <p class="text-muted">Browse paid orders waiting for a logistics partner. Accept deliveries to add them to your queue.</p>
+            <a href="{{ url_for('logistics_available') }}" class="btn btn-outline-info rounded-pill fw-medium mt-auto">
+                Browse <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <i class="bi bi-truck fs-2 text-primary"></i>
+                <h5 class="fw-bold mb-0">My Deliveries</h5>
+            </div>
+            <p class="text-muted">Track and update the status of deliveries you have accepted. Update from Picked Up → In Transit → Delivered.</p>
+            <a href="{{ url_for('logistics_my_deliveries') }}" class="btn btn-outline-primary rounded-pill fw-medium mt-auto">
+                View Mine <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -93,6 +93,11 @@
                 </div>
 
                 <div class="mb-4">
+                    <label class="form-label fw-medium text-dark small text-uppercase tracking-wider">Desired Quantity</label>
+                    <input type="number" id="desired-qty" class="form-control bg-light border-0 shadow-sm" placeholder="e.g. 5000 (Optional)">
+                </div>
+
+                <div class="mb-4">
                     <label class="form-label fw-medium text-dark small text-uppercase tracking-wider d-flex justify-content-between">
                         <span>Max Price (₹)</span>
                         <span id="price-display" class="text-primary fw-bold">₹5000</span>
@@ -134,6 +139,22 @@
 
             <!-- Grid View -->
             <div id="grid-view">
+                <!-- Pooled Order Banner -->
+                <div id="pooled-order-banner" class="alert alert-info border-0 shadow-sm rounded-4 d-flex align-items-center justify-content-between mb-4 d-none" style="background-color: #e0f2f1;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center text-primary" style="width: 40px; height: 40px;">
+                            <i class="bi bi-diagram-3-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">Need more quantity?</h6>
+                            <p class="mb-0 text-muted small">No single farmer has enough — combine listings to reach your goal.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary fw-medium px-4 rounded-pill shadow-sm" id="btn-open-combine-modal">
+                        Combine Listings
+                    </button>
+                </div>
+
                 <div id="listings-grid" class="row g-4">
                     <!-- Populated by JS -->
                 </div>
@@ -207,6 +228,95 @@
                 <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-interest-btn">
                     <i class="bi bi-send me-2"></i> Send Request
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Buy Now Modal -->
+<div class="modal fade" id="buyNowModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-bottom-0 pt-4 px-4 pb-2">
+                <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-cart-check-fill text-primary"></i>
+                    Buy Now — <span id="buy-modal-crop-name" class="text-primary"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body px-4">
+                <input type="hidden" id="buy-modal-listing-id">
+                <input type="hidden" id="buy-modal-price-hidden">
+                
+                <div class="alert alert-success border-0 bg-success-subtle text-success-emphasis d-flex align-items-center mb-4 rounded-3">
+                    <i class="bi bi-tag-fill me-3 fs-4"></i>
+                    <div>
+                        <p class="mb-0 small fw-medium">Price: ₹<strong id="buy-modal-price"></strong> / <span id="buy-modal-unit"></span></p>
+                        <p class="mb-0 small fw-medium">Available Quantity: <strong id="buy-modal-max-qty"></strong></p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-medium text-dark small text-uppercase tracking-wider">Purchase Quantity <span class="text-danger">*</span></label>
+                    <input type="number" id="buy-modal-qty-input" class="form-control bg-light form-control-lg" min="1" required placeholder="Enter quantity">
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border mb-2">
+                    <span class="fw-bold text-muted text-uppercase small tracking-wider">Total Price</span>
+                    <h4 class="mb-0 fw-bold text-success">₹<span id="buy-modal-total">0</span></h4>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-buynow-btn" onclick="submitBuyNow()">
+                    <i class="bi bi-cart-check me-2"></i> Confirm Purchase
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Combine Listings Modal -->
+<div class="modal fade" id="combineListingsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-bottom-0 pt-4 px-4 pb-2">
+                <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-diagram-3-fill text-primary"></i>
+                    Combine Listings for <span id="combine-crop-name" class="text-primary"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="alert alert-warning border-0 bg-warning-subtle text-warning-emphasis d-flex align-items-center mb-4 rounded-3 d-none" id="combine-partial-warning">
+                    <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                    <div>
+                        <p class="mb-0 small fw-medium">We couldn't find enough active listings to fully cover your requested quantity. Showing the best available combination.</p>
+                    </div>
+                </div>
+
+                <div class="mb-4 d-flex justify-content-between align-items-end bg-light p-3 rounded-3 border">
+                    <div>
+                        <p class="mb-1 text-muted small text-uppercase tracking-wider fw-bold">Target Quantity</p>
+                        <h4 class="mb-0 fw-bold text-dark"><span id="combine-target-qty">0</span> units</h4>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-1 text-muted small text-uppercase tracking-wider fw-bold">Total Estimated Cost</p>
+                        <h4 class="mb-0 fw-bold text-success">₹<span id="combine-total-cost">0</span></h4>
+                    </div>
+                </div>
+                
+                <h6 class="fw-bold mb-3">Selected Farmers (<span id="combine-farmer-count">0</span>)</h6>
+                <div id="combine-listings-container" class="d-flex flex-column gap-3 mb-4 max-h-300 overflow-y-auto pr-2">
+                    <!-- Populated by JS -->
+                </div>
+                
+            </div>
+            <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-combine-btn">
+                    <i class="bi bi-send me-2"></i> Send Pooled Request
                 </button>
             </div>
         </div>

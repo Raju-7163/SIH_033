@@ -28,7 +28,7 @@
 
     <!-- Content -->
     <div class="requests-container">
-        {% if not requests or requests|length == 0 %}
+        {% if (not requests or requests|length == 0) and (not pooled_requests or pooled_requests|length == 0) %}
             <!-- Empty State -->
             <div class="card border-0 shadow-sm rounded-4 mt-2">
                 <div class="card-body text-center py-5">
@@ -44,6 +44,55 @@
             </div>
         {% else %}
             <div class="row g-4">
+                <!-- Render Pooled Requests -->
+                {% for pool in pooled_requests %}
+                <div class="col-12 buyer-request-card" data-status="pooled">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift overflow-hidden border-start border-4 border-primary">
+                        <div class="card-body p-0">
+                            <!-- Top: Pool Info -->
+                            <div class="d-flex align-items-center justify-content-between p-3 bg-light border-bottom">
+                                <div>
+                                    <span class="badge bg-primary mb-2">Pooled Order</span>
+                                    <h5 class="fw-bold mb-1">{{ pool.crop_name }}</h5>
+                                    <div class="text-muted small">
+                                        <i class="bi bi-people-fill me-1"></i> {{ pool.sub_requests|length }} Farmers Combined
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold fs-5 text-dark">{{ pool.total_quantity }} <span class="fs-6 text-muted fw-normal">units total</span></div>
+                                    <span class="small text-muted">{{ pool.created_at.strftime('%d %b %Y') }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Sub Requests -->
+                            <div class="p-3 bg-white">
+                                <h6 class="fw-bold small text-uppercase tracking-wider text-muted mb-3">Individual Farmer Statuses</h6>
+                                <div class="d-flex flex-column gap-2">
+                                    {% for req in pool.sub_requests %}
+                                    <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light border">
+                                        <div>
+                                            <span class="fw-medium text-dark"><i class="bi bi-person-fill me-1 text-muted"></i>{{ req.farmer_name }}</span>
+                                            <span class="text-muted small ms-2">({{ req.quantity_requested }} units)</span>
+                                        </div>
+                                        <div>
+                                            {% if req.status == 'pending' %}
+                                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Pending</span>
+                                            {% elif req.status == 'accepted' %}
+                                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Accepted</span>
+                                            {% else %}
+                                                <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle">Rejected</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Render Standalone Requests -->
                 {% for req in requests %}
                 <div class="col-md-6 col-xl-4 buyer-request-card" data-status="{{ req.status }}">
                     <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift overflow-hidden">
@@ -78,10 +127,60 @@
                                     <small class="text-muted text-uppercase tracking-wider fw-bold d-block mb-1" style="font-size: 0.7rem;">Your Message</small>
                                     <p class="mb-0 text-dark small fst-italic text-truncate-2">"{{ req.message | default('I am interested in buying this.') }}"</p>
                                 </div>
-                                
+                                <!-- Contact Info — revealed only after acceptance -->
+                                {% if req.status == 'accepted' and req.farmer_phone %}
+                                <div class="bg-success-subtle rounded-3 p-3 mb-3 border border-success-subtle">
+                                    <p class="fw-bold small text-success-emphasis mb-1">
+                                        <i class="bi bi-telephone-fill me-1"></i> Farmer Contact (Revealed)
+                                    </p>
+                                    <p class="mb-0 small text-dark">
+                                        <strong>{{ req.farmer_name }}</strong> &bull;
+                                        <a href="tel:{{ req.farmer_phone }}" class="text-primary text-decoration-none fw-medium">
+                                            <i class="bi bi-phone me-1"></i>{{ req.farmer_phone }}
+                                        </a>
+                                    </p>
+                                </div>
+                                {% elif req.status == 'pending' %}
+                                <div class="bg-light rounded-3 p-3 mb-3 border border-dashed text-muted small d-flex align-items-center gap-2">
+                                    <i class="bi bi-lock text-muted"></i>
+                                    Farmer contact revealed after acceptance.
+                                </div>
+                                {% endif %}
+
+                                <!-- Payment & Delivery Status — only for accepted requests with an order -->
+                                {% if req.status == 'accepted' %}
+                                    {% if req.order_id %}
+                                        {% if req.payment_status == 'pending' %}
+                                        <!-- Pay Now Button -->
+                                        <button class="btn btn-success w-100 fw-bold rounded-pill shadow-sm mt-1 py-2"
+                                                onclick="openPayModal('{{ req.order_id }}', '{{ req.crop_name }}', {{ req.total_amount }})">
+                                            <i class="bi bi-credit-card me-2"></i>Pay ₹{{ req.total_amount }} Now
+                                        </button>
+                                        {% elif req.payment_status == 'paid' %}
+                                        <!-- Paid + Delivery Status -->
+                                        <div class="d-flex align-items-center gap-2 bg-success-subtle border border-success-subtle rounded-pill px-3 py-2 mt-1">
+                                            <i class="bi bi-check-circle-fill text-success"></i>
+                                            <span class="fw-medium text-success-emphasis small">Paid</span>
+                                            <span class="text-muted small ms-auto">
+                                                {% if req.delivery_status == 'awaiting_pickup' %}📦 Awaiting Pickup
+                                                {% elif req.delivery_status == 'picked_up' %}🚛 Picked Up
+                                                {% elif req.delivery_status == 'in_transit' %}🚛 In Transit
+                                                {% elif req.delivery_status == 'delivered' %}✅ Delivered
+                                                {% else %}{{ req.delivery_status }}{% endif %}
+                                            </span>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                    <!-- Accepted but no order yet (pre-feature data) — show contact only -->
+                                    <div class="alert alert-success-subtle text-success-emphasis small rounded-3 border border-success-subtle py-2 px-3 mt-1 mb-0">
+                                        <i class="bi bi-handshake me-1"></i> Deal accepted — contact the farmer to arrange payment and delivery.
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+
                                 <!-- Bottom: Status & Date -->
-                                <div class="d-flex justify-content-between align-items-center mt-auto">
-                                    <div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="status-container">
                                         {% if req.status == 'pending' %}
                                             <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2 border border-warning-subtle fw-medium"><i class="bi bi-hourglass-split me-1"></i>Pending Review</span>
                                         {% elif req.status == 'accepted' %}
@@ -93,17 +192,6 @@
                                     <span class="small text-muted">{{ req.created_at.strftime('%d %b %Y') if req.created_at else 'Recent' }}</span>
                                 </div>
                             </div>
-                            
-                            <!-- Contact Info (only if accepted) -->
-                            {% if req.status == 'accepted' %}
-                            <div class="bg-success-subtle p-3 border-top border-success-subtle d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-2 text-success-emphasis small fw-medium">
-                                    <i class="bi bi-telephone-fill"></i> Farmer Contact
-                                </div>
-                                <span class="badge bg-success shadow-sm px-3 py-2">Check Messages</span>
-                            </div>
-                            {% endif %}
-                            
                         </div>
                     </div>
                 </div>
@@ -112,27 +200,125 @@
         {% endif %}
     </div>
 </div>
+
+<!-- =====================================================================
+     DEMO PAYMENT MODAL
+     Clearly labeled as demo — no real transaction.
+     ===================================================================== -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+            <!-- Header with demo warning -->
+            <div class="modal-header bg-success text-white border-0">
+                <div>
+                    <h5 class="modal-title fw-bold mb-0" id="paymentModalLabel">
+                        <i class="bi bi-credit-card me-2"></i>Complete Payment
+                    </h5>
+                    <small class="opacity-75">🔒 Demo Payment — No real transaction</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Amount display -->
+                <div class="text-center bg-success-subtle rounded-3 p-3 mb-4 border border-success-subtle">
+                    <p class="text-muted small mb-1">Total Amount</p>
+                    <h2 class="fw-bold text-success mb-0" id="pay-amount-display">₹0</h2>
+                    <p class="text-muted small mt-1" id="pay-crop-display"></p>
+                </div>
+
+                <!-- Mock payment fields -->
+                <div class="mb-3">
+                    <label class="form-label fw-medium small">Payment Method</label>
+                    <select class="form-select form-select-sm rounded-pill border-success">
+                        <option>UPI (PhonePe / GPay / BHIM)</option>
+                        <option>Credit / Debit Card</option>
+                        <option>Net Banking</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-medium small">UPI ID / Card Number</label>
+                    <input type="text" class="form-control rounded-pill border-success"
+                           placeholder="e.g. yourname@upi or 4242 4242 4242 4242"
+                           id="mock-payment-input" value="demo@upi">
+                    <div class="form-text text-muted"><i class="bi bi-info-circle me-1"></i>Any value accepted — this is a demo.</div>
+                </div>
+
+                <!-- Hidden: order ID to post -->
+                <input type="hidden" id="pay-order-id">
+
+                <!-- Pay button -->
+                <button class="btn btn-success w-100 fw-bold rounded-pill py-3 shadow-sm"
+                        id="pay-submit-btn" onclick="submitPayment()">
+                    <i class="bi bi-lock-fill me-2"></i>Pay <span id="pay-btn-amount">₹0</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
+    // ===== Tab Filter =====
     document.querySelectorAll('#buyer-request-tabs button').forEach(tab => {
         tab.addEventListener('click', function (event) {
             document.querySelectorAll('#buyer-request-tabs button').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
             const targetId = this.getAttribute('data-filter');
-            const allCards = document.querySelectorAll('.buyer-request-card');
-            
-            allCards.forEach(card => {
+            document.querySelectorAll('.buyer-request-card').forEach(card => {
                 const status = card.getAttribute('data-status');
-                if (targetId === 'all' || status === targetId) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (targetId === 'all' || status === targetId) ? 'block' : 'none';
             });
         });
     });
+
+    // ===== Payment Modal =====
+    let payModal = null;
+
+    function openPayModal(orderId, cropName, amount) {
+        document.getElementById('pay-order-id').value  = orderId;
+        document.getElementById('pay-amount-display').textContent = '₹' + amount;
+        document.getElementById('pay-btn-amount').textContent     = '₹' + amount;
+        document.getElementById('pay-crop-display').textContent   = cropName + ' order';
+        payModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        payModal.show();
+    }
+
+    function submitPayment() {
+        const orderId = document.getElementById('pay-order-id').value;
+        const btn     = document.getElementById('pay-submit-btn');
+        btn.disabled  = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+        // Simulate a short payment processing delay for demo effect
+        setTimeout(() => {
+            fetch('/api/pay-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: orderId })
+            })
+            .then(r => r.json().then(data => ({ ok: r.ok, data })))
+            .then(({ ok, data }) => {
+                if (ok && data.success) {
+                    btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Payment Successful!';
+                    btn.classList.replace('btn-success', 'btn-outline-success');
+                    showToast('Payment successful! Your order is confirmed.', 'success');
+                    // Reload page after 1.5s to show updated status
+                    setTimeout(() => { payModal.hide(); location.reload(); }, 1500);
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Pay <span>' + document.getElementById('pay-btn-amount').textContent + '</span>';
+                    showToast(data.message || 'Payment failed. Try again.', 'error');
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerHTML = 'Retry Payment';
+                showToast('Network error. Please try again.', 'error');
+            });
+        }, 1500); // 1.5s fake processing spinner
+    }
 </script>
 {% endblock %}
+

@@ -16,10 +16,9 @@
 </head>
 <body>
 
-    <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-brand">
-            <a href="{% if session.get('role') == 'farmer' %}{{ url_for('farmer_dashboard') }}{% else %}{{ url_for('buyer_dashboard') }}{% endif %}" class="text-decoration-none text-white d-flex align-items-center gap-2">
+            <a href="{% if session.get('role') == 'farmer' %}{{ url_for('farmer_dashboard') }}{% elif session.get('role') == 'logistics' %}{{ url_for('logistics_dashboard') }}{% else %}{{ url_for('buyer_dashboard') }}{% endif %}" class="text-decoration-none text-white d-flex align-items-center gap-2">
                 <i class="bi bi-tree-fill fs-3 text-accent"></i>
                 <span class="fw-bold fs-4">AgriConnect</span>
             </a>
@@ -61,7 +60,35 @@
                         <i class="bi bi-box-arrow-right"></i> <span data-i18n="nav.logout">Logout</span>
                     </a>
                 </li>
+            {% elif session.get('role') == 'logistics' %}
+                <!-- Logistics Partner sidebar nav -->
+                <li class="nav-item">
+                    <a class="sidebar-nav-item {% if request.endpoint == 'logistics_dashboard' %}active{% endif %}" href="{{ url_for('logistics_dashboard') }}">
+                        <i class="bi bi-grid-1x2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="sidebar-nav-item {% if request.endpoint == 'logistics_available' %}active{% endif %}" href="{{ url_for('logistics_available') }}">
+                        <i class="bi bi-box-seam"></i> Available Deliveries
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="sidebar-nav-item {% if request.endpoint == 'logistics_my_deliveries' %}active{% endif %}" href="{{ url_for('logistics_my_deliveries') }}">
+                        <i class="bi bi-truck"></i> My Deliveries
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="sidebar-nav-item {% if request.endpoint == 'logistics_profile' %}active{% endif %}" href="{{ url_for('logistics_profile') }}">
+                        <i class="bi bi-person"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item mt-auto pt-4">
+                    <a class="sidebar-nav-item text-danger" href="{{ url_for('logout') }}">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </li>
             {% else %}
+                <!-- Buyer sidebar nav -->
                 <li class="nav-item">
                     <a class="sidebar-nav-item {% if request.endpoint == 'buyer_dashboard' %}active{% endif %}" href="{{ url_for('buyer_dashboard') }}">
                         <i class="bi bi-grid-1x2"></i> <span data-i18n="nav.dashboard">Dashboard</span>
