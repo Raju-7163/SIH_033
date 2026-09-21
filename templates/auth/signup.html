@@ -34,6 +34,29 @@
             color: #2d6a4f;
             transition: opacity 0.2s ease;
         }
+        .auth-right .form-control, .auth-right .input-group-text, .auth-right .form-select {
+            background-color: #f8f9fa !important;
+            border-color: #dee2e6;
+            transition: all 0.3s ease;
+        }
+        .auth-right .form-control:focus, .auth-right .form-select:focus {
+            background-color: #ffffff !important;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(45, 106, 79, 0.25);
+        }
+        .auth-right .btn-primary {
+            transition: all 0.3s ease;
+        }
+        .auth-right .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+            background-color: #24553f;
+            border-color: #24553f;
+        }
+        /* Ensure better contrast for text */
+        .text-muted {
+            color: #5a6268 !important;
+        }
     </style>
 </head>
 <body class="bg-light">

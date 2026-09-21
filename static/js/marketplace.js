@@ -107,10 +107,13 @@ function renderCards() {
             <div class="text-muted small mb-1 text-truncate" title="${listing.district}, ${listing.state}"><i class="bi bi-geo-alt"></i> ${listing.district}, ${listing.state}</div>
             <div class="text-muted small mb-3 text-truncate" title="${listing.farmer_name}"><i class="bi bi-person"></i> ${listing.farmer_name}</div>
             <div class="mt-auto d-flex gap-2">
-              <button class="btn btn-primary flex-grow-1" onclick="openBuyNowModal('${listing._id}', '${listing.crop_name}', ${listing.quantity}, '${listing.unit}', ${listing.price_per_unit})">
-                <i class="bi bi-cart-check"></i> Buy Now
+              <button class="btn btn-outline-primary flex-grow-1" onclick="openAddToCartModal('${listing._id}', '${listing.crop_name}', ${listing.quantity}, '${listing.unit}', ${listing.price_per_unit})" title="Add to Cart">
+                <i class="bi bi-cart-plus"></i> Add
               </button>
-              <button class="btn btn-outline-primary" title="Send Interest" onclick="openInterestModal('${listing._id}', '${listing.crop_name}', ${listing.quantity}, '${listing.unit}')">
+              <button class="btn btn-primary flex-grow-1" onclick="openBuyNowModal('${listing._id}', '${listing.crop_name}', ${listing.quantity}, '${listing.unit}', ${listing.price_per_unit})" title="Buy Now">
+                <i class="bi bi-cart-check"></i> Buy
+              </button>
+              <button class="btn btn-outline-secondary px-3" title="Send Interest" onclick="openInterestModal('${listing._id}', '${listing.crop_name}', ${listing.quantity}, '${listing.unit}')">
                 <i class="bi bi-send"></i>
               </button>
             </div>
@@ -187,7 +190,10 @@ function toggleView(view) {
     mapView.classList.remove('d-none');
     gridBtn.classList.remove('active');
     mapBtn.classList.add('active');
-    setTimeout(initMap, 100); // Wait for div to be visible
+    setTimeout(() => {
+        initMap();
+        if (map) map.invalidateSize();
+    }, 100);
   } else {
     mapView.classList.add('d-none');
     gridView.classList.remove('d-none');
@@ -454,4 +460,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('results-count').textContent = filteredListings.length + ' listings found';
 });
+
+
+
+// ===== ADD TO CART MODAL =====
+function openAddToCartModal(listingId, cropName, maxQty, unit, pricePerUnit) {
+  document.getElementById('cart-modal-listing-id').value = listingId;
+  document.getElementById('cart-modal-crop-name').textContent = cropName;
+  document.getElementById('cart-modal-max-qty').textContent = maxQty + ' ' + unit;
+  document.getElementById('cart-modal-price').textContent = pricePerUnit;
+  document.getElementById('cart-modal-price-hidden').value = pricePerUnit;
+  document.getElementById('cart-modal-unit').textContent = unit;
+  
+  const qtyInput = document.getElementById('cart-modal-qty-input');
+  qtyInput.max = maxQty;
+  qtyInput.value = '';
+  document.getElementById('cart-modal-total').textContent = '0';
+  
+  qtyInput.addEventListener('input', function() {
+    let q = parseInt(this.value) || 0;
+    if (q > maxQty) q = maxQty;
+    document.getElementById('cart-modal-total').textContent = q * pricePerUnit;
+  });
+
+  const modal = new bootstrap.Modal(document.getElementById('addToCartModal'));
+  modal.show();
+}
+
+function submitAddToCart() {
+  const listingId = document.getElementById('cart-modal-listing-id').value;
+  const qty = parseInt(document.getElementById('cart-modal-qty-input').value);
+  
+  if (!qty || qty <= 0) {
+    alert('Please enter a valid quantity.');
+    return;
+  }
+  
+  const btn = document.getElementById('submit-cart-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Adding...';
+  
+  fetch('/buyer/cart/add', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ listing_id: listingId, quantity: qty })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Added to cart!');
+      updateCartBadge(data.cart_count);
+      bootstrap.Modal.getInstance(document.getElementById('addToCartModal')).hide();
+    } else {
+      alert(data.message || 'Error adding to cart.');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Network error.');
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-cart-plus me-2"></i> Add to Cart';
+  });
+}
 

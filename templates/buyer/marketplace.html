@@ -277,6 +277,49 @@
     </div>
 </div>
 
+<!-- Add To Cart Modal -->
+<div class="modal fade" id="addToCartModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-bottom-0 pt-4 px-4 pb-2">
+                <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-cart-plus-fill text-primary"></i>
+                    Add to Cart - <span id="cart-modal-crop-name" class="text-primary"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body px-4">
+                <input type="hidden" id="cart-modal-listing-id">
+                <input type="hidden" id="cart-modal-price-hidden">
+                
+                <div class="alert alert-success border-0 bg-success-subtle text-success-emphasis d-flex align-items-center mb-4 rounded-3">
+                    <i class="bi bi-tag-fill me-3 fs-4"></i>
+                    <div>
+                        <p class="mb-0 small fw-medium">Price: ₹<strong id="cart-modal-price"></strong> / <span id="cart-modal-unit"></span></p>
+                        <p class="mb-0 small fw-medium">Available Quantity: <strong id="cart-modal-max-qty"></strong></p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-medium text-dark small text-uppercase tracking-wider">Quantity to Add <span class="text-danger">*</span></label>
+                    <input type="number" id="cart-modal-qty-input" class="form-control bg-light form-control-lg" min="1" required placeholder="Enter quantity">
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border mb-2">
+                    <span class="fw-bold text-muted text-uppercase small tracking-wider">Total Price</span>
+                    <h4 class="mb-0 fw-bold text-success">₹<span id="cart-modal-total">0</span></h4>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-cart-btn" onclick="submitAddToCart()">
+                    <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Combine Listings Modal -->
 <div class="modal fade" id="combineListingsModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">

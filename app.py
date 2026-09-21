@@ -28,7 +28,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # ── MongoDB Connection ───────────────────────────────────────────────────────
 try:
-    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
+    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000, tls=True, tlsAllowInvalidCertificates=True)
     client.server_info()  # Verify connection works
     try:
         db = client.get_default_database()
@@ -206,6 +206,10 @@ def signup():
 def login():
     """Authenticate user and create session. Supports farmer, buyer, and logistics roles."""
     if request.method == 'POST':
+        if db is None:
+            flash("Database connection error: Please whitelist your IP in MongoDB Atlas.", "error")
+            return render_template('auth/login.html')
+            
         email    = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '')
         user = db.users.find_one({"email": email})
@@ -680,6 +684,139 @@ def buyer_marketplace():
 
 
 from pymongo import ReturnDocument
+
+@app.route('/buyer/cart/add', methods=['POST'])
+@login_required(role='buyer')
+def buyer_add_to_cart():
+    """Add item to shopping cart in session."""
+    data = request.get_json()
+    listing_id = data.get('listing_id')
+    quantity = int(data.get('quantity', 0))
+
+    if not listing_id or quantity <= 0:
+        return jsonify({"success": False, "message": "Invalid input data."}), 400
+
+    if 'cart' not in session:
+        session['cart'] = {}
+
+    cart = session['cart']
+    cart[listing_id] = cart.get(listing_id, 0) + quantity
+    session.modified = True
+
+    return jsonify({"success": True, "cart_count": len(cart)})
+
+@app.route('/api/cart', methods=['GET'])
+@login_required(role='buyer')
+def api_get_cart():
+    """Get all items currently in cart."""
+    cart = session.get('cart', {})
+    items = []
+    total = 0
+    for l_id, qty in list(cart.items()):
+        listing = db.listings.find_one({"_id": ObjectId(l_id)})
+        if not listing or listing['status'] != 'active' or listing['quantity'] <= 0:
+            continue
+            
+        farmer = db.users.find_one({"_id": listing['farmer_id']})
+        actual_qty = min(qty, listing.get('quantity', 0))
+        cost = actual_qty * listing.get('price_per_unit', 0)
+        total += cost
+        
+        items.append({
+            "listing_id": l_id,
+            "crop_name": listing.get('crop_name', ''),
+            "quantity": actual_qty,
+            "unit": listing.get('unit', 'kg'),
+            "price_per_unit": listing.get('price_per_unit', 0),
+            "cost": cost,
+            "photo_url": listing.get('photo_url', ''),
+            "farmer_name": farmer['name'] if farmer else 'Unknown'
+        })
+
+    return jsonify({"success": True, "cart": items, "total": total})
+
+@app.route('/buyer/cart/remove', methods=['POST'])
+@login_required(role='buyer')
+def buyer_remove_from_cart():
+    data = request.get_json()
+    listing_id = data.get('listing_id')
+    cart = session.get('cart', {})
+    if listing_id in cart:
+        del cart[listing_id]
+        session.modified = True
+    return jsonify({"success": True, "cart_count": len(cart)})
+
+@app.route('/buyer/checkout-all', methods=['POST'])
+@login_required(role='buyer')
+def buyer_checkout_all():
+    buyer_id = ObjectId(session['user_id'])
+    cart = session.get('cart', {})
+    if not cart:
+        return jsonify({"success": False, "message": "Cart is empty."})
+        
+    success_count = 0
+    errors = []
+    
+    for listing_id, quantity in list(cart.items()):
+        try:
+            updated_listing = db.listings.find_one_and_update(
+                {"_id": ObjectId(listing_id), "quantity": {"$gte": quantity}, "status": "active"},
+                {"$inc": {"quantity": -quantity}},
+                return_document=ReturnDocument.AFTER
+            )
+            
+            if not updated_listing:
+                errors.append(f"Item unavailable or insufficient quantity for {listing_id}")
+                continue
+                
+            if updated_listing['quantity'] <= 0:
+                db.listings.update_one({"_id": ObjectId(listing_id)}, {"$set": {"status": "sold"}})
+                
+            req_result = db.requests.insert_one({
+                "buyer_id": buyer_id,
+                "farmer_id": updated_listing['farmer_id'],
+                "listing_id": updated_listing['_id'],
+                "quantity_requested": quantity,
+                "message": "Cart Checkout",
+                "status": "accepted",
+                "created_at": datetime.now()
+            })
+            
+            total_amount = quantity * updated_listing.get('price_per_unit', 0)
+            db.orders.insert_one({
+                "request_id": req_result.inserted_id,
+                "buyer_id": buyer_id,
+                "farmer_id": updated_listing['farmer_id'],
+                "listing_id": updated_listing['_id'],
+                "crop_name": updated_listing.get('crop_name', ''),
+                "quantity": quantity,
+                "total_amount": total_amount,
+                "payment_status": "pending",
+                "delivery_status": "awaiting_payment",
+                "logistics_partner_id": None,
+                "created_at": datetime.now()
+            })
+            
+            db.notifications.insert_one({
+                "user_id": updated_listing['farmer_id'],
+                "message": f"Your {updated_listing.get('crop_name')} listing was just purchased — {quantity} {updated_listing.get('unit', 'kg')} via Checkout!",
+                "status": "unread",
+                "created_at": datetime.now()
+            })
+            
+            success_count += 1
+            del cart[listing_id]
+        except Exception as e:
+            errors.append(str(e))
+            
+    session.modified = True
+    
+    return jsonify({
+        "success": True, 
+        "message": f"Successfully checked out {success_count} items.", 
+        "errors": errors,
+        "cart_count": len(cart)
+    })
 
 @app.route('/buyer/buy-now', methods=['POST'])
 @login_required(role='buyer')

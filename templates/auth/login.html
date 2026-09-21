@@ -12,6 +12,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .auth-right .form-control, .auth-right .input-group-text, .auth-right .form-select {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            transition: all 0.3s ease;
+        }
+        .auth-right .form-control:focus, .auth-right .form-select:focus {
+            background-color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(45, 106, 79, 0.25);
+        }
+        .auth-right .btn-primary {
+            transition: all 0.3s ease;
+        }
+        .auth-right .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+            background-color: #24553f;
+            border-color: #24553f;
+        }
+        .auth-right .input-group-text {
+            background-color: #f8f9fa !important;
+        }
+        .auth-right .form-control {
+            background-color: #f8f9fa !important;
+        }
+        .auth-right .form-control:focus {
+            background-color: #ffffff !important;
+        }
+        /* Ensure better contrast for text */
+        .text-muted {
+            color: #5a6268 !important;
+        }
+    </style>
 </head>
 <body class="bg-light">
 

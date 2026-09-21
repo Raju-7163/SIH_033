@@ -124,3 +124,122 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(pollNotifications, 30000);
   }
 });
+
+// ===== CART LOGIC =====
+function updateCartBadge(count) {
+    const badge = document.getElementById('cart-badge');
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+}
+
+function openCartModal() {
+    fetch('/api/cart')
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+            const container = document.getElementById('cart-items-container');
+            if (data.cart.length === 0) {
+                container.innerHTML = '<div class="text-center py-4 text-muted">Your cart is empty.</div>';
+                document.getElementById('cart-total-price').textContent = '₹0';
+            } else {
+                container.innerHTML = data.cart.map(item => `
+                    <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom cart-item">
+                        <img src="${item.photo_url}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400'">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0 fw-bold">${item.crop_name}</h6>
+                            <small class="text-muted">${item.farmer_name}</small>
+                            <div class="text-success small">₹${item.price_per_unit} / ${item.unit}</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold">${item.quantity} ${item.unit}</div>
+                            <div class="text-primary fw-bold">₹${item.cost}</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger ms-2" onclick="removeFromCart('${item.listing_id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+                document.getElementById('cart-total-price').textContent = '₹' + data.total;
+            }
+            updateCartBadge(data.cart.length);
+            const modal = new bootstrap.Modal(document.getElementById('cartModal'));
+            modal.show();
+        });
+}
+
+function removeFromCart(listingId) {
+    fetch('/buyer/cart/remove', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ listing_id: listingId })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            updateCartBadge(data.cart_count);
+            // Re-render modal
+            fetch('/api/cart').then(r => r.json()).then(d => {
+                if (d.success && d.cart.length === 0) {
+                    bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
+                } else if (d.success) {
+                    const modalEl = document.getElementById('cartModal');
+                    if(modalEl.classList.contains('show')) {
+                        bootstrap.Modal.getInstance(modalEl).hide();
+                        setTimeout(openCartModal, 400);
+                    }
+                }
+            });
+        }
+    });
+}
+
+function checkoutCart() {
+    const btn = document.querySelector('#cartModal .btn-primary');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+    
+    fetch('/buyer/checkout-all', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            updateCartBadge(0);
+            bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
+            
+            let msg = data.message;
+            if (data.errors && data.errors.length > 0) {
+                msg += '\nErrors: ' + data.errors.join(', ');
+            }
+            alert(msg);
+            
+            window.location.href = '/buyer/my-requests';
+        } else {
+            alert(data.message || 'Error checking out.');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Network error.');
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Checkout All';
+    });
+}
+
+// Fetch initial cart count
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('cart-badge')) {
+        fetch('/api/cart')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartBadge(data.cart.length);
+                }
+            });
+    }
+});

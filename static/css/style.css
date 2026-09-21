@@ -890,3 +890,12 @@ img {
     justify-content: center;
   }
 }
+
+@media (min-width: 769px) {
+  .sidebar { transition: transform 0.3s ease; }
+  .sidebar.collapsed { transform: translateX(-260px); }
+  .main-content { transition: margin-left 0.3s ease; }
+  .main-content.expanded { margin-left: 0; }
+  #sidebar-toggle { display: inline-block !important; }
+}
+
