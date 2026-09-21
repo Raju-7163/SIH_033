@@ -4,17 +4,17 @@ Main Flask application with all routes, authentication, and API endpoints.
 """
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
-import os
-import bcrypt
-import requests as http_requests
-import json
+import os, bcrypt, requests as http_requests, json, uuid
+import certifi
 from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 from bson import ObjectId
+from bson.json_util import dumps
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 from functools import wraps
 import config
-import uuid
+from seed import seed_database
 
 # ── App Initialization ──────────────────────────────────────────────────────
 app = Flask(__name__)
@@ -28,7 +28,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # ── MongoDB Connection ───────────────────────────────────────────────────────
 try:
-    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000)
+    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
     client.server_info()  # Verify connection works
     try:
         db = client.get_default_database()
@@ -1298,4 +1298,6 @@ def logistics_profile():
 
 if __name__ == '__main__':
     # Use the 'stat' reloader -- avoids WinError 10038 watchdog socket bug on Windows
-    app.run(debug=True, port=5000, reloader_type='stat')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True, reloader_type='stat')
+

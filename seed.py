@@ -1,13 +1,14 @@
 import bcrypt
 from datetime import datetime
 from pymongo import MongoClient
+import certifi
 import config
 
 def seed_database():
     """Seeds the MongoDB database with initial farmers, buyers, listings, requests, and notifications.
     Idempotent — checks if data already exists before inserting anything."""
     print("Connecting to MongoDB for seeding...")
-    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000)
+    client = MongoClient(config.MONGO_URI, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
     try:
         db = client.get_default_database()   # Uses DB name from URI
     except Exception:
