@@ -726,6 +726,7 @@ def api_get_cart():
             "listing_id": l_id,
             "crop_name": listing.get('crop_name', ''),
             "quantity": actual_qty,
+            "max_quantity": listing.get('quantity', 0),
             "unit": listing.get('unit', 'kg'),
             "price_per_unit": listing.get('price_per_unit', 0),
             "cost": cost,
@@ -743,6 +744,21 @@ def buyer_remove_from_cart():
     cart = session.get('cart', {})
     if listing_id in cart:
         del cart[listing_id]
+        session.modified = True
+    return jsonify({"success": True, "cart_count": len(cart)})
+
+@app.route('/buyer/cart/update', methods=['POST'])
+@login_required(role='buyer')
+def buyer_update_cart():
+    data = request.get_json()
+    listing_id = data.get('listing_id')
+    quantity = int(data.get('quantity', 0))
+    if not listing_id or quantity <= 0:
+        return jsonify({"success": False, "message": "Invalid input."})
+    
+    cart = session.get('cart', {})
+    if listing_id in cart:
+        cart[listing_id] = quantity
         session.modified = True
     return jsonify({"success": True, "cart_count": len(cart)})
 

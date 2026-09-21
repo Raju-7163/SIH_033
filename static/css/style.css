@@ -33,7 +33,6 @@ body {
   background: var(--bg-light);
   color: var(--dark);
   line-height: 1.6;
-  overflow-x: hidden;
 }
 
 a {
@@ -215,7 +214,7 @@ img {
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 0.5rem;
-  display: block;
+  display: inline-block;
 }
 
 .stat-label {

@@ -153,7 +153,9 @@ function openCartModal() {
                             <div class="text-success small">₹${item.price_per_unit} / ${item.unit}</div>
                         </div>
                         <div class="text-end">
-                            <div class="fw-bold">${item.quantity} ${item.unit}</div>
+                            <div class="input-group input-group-sm mb-1" style="width: 100px;">
+                                <input type="number" class="form-control text-center" value="${item.quantity}" min="1" max="${item.max_quantity}" onchange="updateCartQuantity('${item.listing_id}', this.value, ${item.max_quantity})">
+                            </div>
                             <div class="text-primary fw-bold">₹${item.cost}</div>
                         </div>
                         <button class="btn btn-sm btn-outline-danger ms-2" onclick="removeFromCart('${item.listing_id}')">
@@ -191,6 +193,30 @@ function removeFromCart(listingId) {
                     }
                 }
             });
+        }
+    });
+}
+
+function updateCartQuantity(listingId, quantity, maxQty) {
+    let q = parseInt(quantity);
+    if (isNaN(q) || q <= 0) q = 1;
+    if (q > maxQty) q = maxQty;
+    
+    fetch('/buyer/cart/update', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ listing_id: listingId, quantity: q })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            updateCartBadge(data.cart_count);
+            // Re-render modal to show updated prices
+            const modalEl = document.getElementById('cartModal');
+            if(modalEl.classList.contains('show')) {
+                bootstrap.Modal.getInstance(modalEl).hide();
+                setTimeout(openCartModal, 400);
+            }
         }
     });
 }
