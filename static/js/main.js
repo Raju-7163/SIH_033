@@ -91,20 +91,7 @@ function showToast(message, type = 'success') {
 }
 
 // ===== MOBILE SIDEBAR TOGGLE =====
-const sidebarToggle = document.getElementById('sidebar-toggle');
-if (sidebarToggle) {
-  sidebarToggle.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      document.querySelector('.sidebar').classList.toggle('open');
-    } else {
-      const sidebar = document.querySelector('.sidebar');
-      const mainContent = document.querySelector('.main-content');
-      sidebar.classList.toggle('collapsed');
-      mainContent.classList.toggle('expanded');
-      window.localStorage.setItem('sidebar_collapsed', sidebar.classList.contains('collapsed'));
-    }
-  });
-}
+// Sidebar toggle is handled in base.html
 
 // ===== LANGUAGE TOGGLE =====
 const langBtn = document.getElementById('lang-toggle-btn');

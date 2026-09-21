@@ -204,8 +204,11 @@
         document.getElementById('sidebar-toggle').addEventListener('click', function() {
             const sidebar = document.querySelector('.sidebar');
             const mainContent = document.querySelector('.main-content');
+            const topNavbar = document.querySelector('.top-navbar');
+            
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
+            if (topNavbar) topNavbar.classList.toggle('expanded');
             
             // On mobile, keep the original behavior (just showing/hiding off-canvas)
             if (window.innerWidth < 769) {
@@ -220,6 +223,8 @@
         if (window.innerWidth >= 769 && localStorage.getItem('sidebar_collapsed') === 'true') {
             document.querySelector('.sidebar').classList.add('collapsed');
             document.querySelector('.main-content').classList.add('expanded');
+            const topNavbar = document.querySelector('.top-navbar');
+            if (topNavbar) topNavbar.classList.add('expanded');
         }
     </script>
     {% if session.get('role') == 'buyer' %}
