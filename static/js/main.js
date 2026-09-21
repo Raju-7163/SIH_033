@@ -94,7 +94,15 @@ function showToast(message, type = 'success') {
 const sidebarToggle = document.getElementById('sidebar-toggle');
 if (sidebarToggle) {
   sidebarToggle.addEventListener('click', () => {
-    document.querySelector('.sidebar').classList.toggle('open');
+    if (window.innerWidth <= 768) {
+      document.querySelector('.sidebar').classList.toggle('open');
+    } else {
+      const sidebar = document.querySelector('.sidebar');
+      const mainContent = document.querySelector('.main-content');
+      sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('expanded');
+      window.localStorage.setItem('sidebar_collapsed', sidebar.classList.contains('collapsed'));
+    }
   });
 }
 
@@ -131,6 +139,11 @@ function updateCartBadge(count) {
     if (badge) {
         badge.textContent = count;
         badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+    const sidebarBadge = document.getElementById('sidebar-cart-badge');
+    if (sidebarBadge) {
+        sidebarBadge.textContent = count;
+        sidebarBadge.style.display = count > 0 ? 'inline-block' : 'none';
     }
 }
 

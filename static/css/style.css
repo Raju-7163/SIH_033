@@ -283,6 +283,10 @@ img {
   margin-bottom: 1.5rem;
 }
 
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
 .testimonial-section {
   padding: 100px 0;
   background: var(--bg-light);
