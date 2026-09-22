@@ -71,6 +71,31 @@ const translations = {
     'general.status': 'Status',
     'general.date': 'Date',
 
+    'auth.slogan': 'Empowering farmers, serving buyers',
+    'auth.slogan_desc': 'Join the most trusted agricultural marketplace in India.',
+    'auth.feat1': 'Direct farmer-to-buyer connection',
+    'auth.feat2': 'Live mandi price comparison',
+    'auth.feat3': 'Zero commission platform',
+    'auth.welcome': 'Welcome Back',
+    'auth.sign_in_desc': 'Sign in to your AgriConnect account',
+    'auth.remember': 'Remember me',
+    'auth.forgot': 'Forgot password?',
+    'auth.no_account': 'Don\'t have an account?',
+    'auth.create': 'Create an Account',
+    'auth.join_today': 'Join AgriConnect today',
+    'auth.have_account': 'Already have an account?',
+    'auth.back': 'Back to home',
+    'auth.demo': 'Demo Credentials',
+
+'hero.badge': 'Revolutionizing Indian Agriculture',
+
+
+    'hero.join_farmers': 'Join <strong class="text-white">2,400+</strong> farmers already earning more',
+    'hero.profit_increase': '+35% Profit',
+    'hero.avg_increase': 'Average farmer increase',
+    'footer.copyright': '© 2024 AgriConnect. All rights reserved.',
+
+
     'dash.requests_sent': 'Requests Sent',
     'dash.saved_listings': 'Saved Listings',
     'dash.active_deals': 'Active Deals',
@@ -177,7 +202,7 @@ function applyTranslations(lang) {
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = translations[lang][key];
       } else {
-        el.textContent = translations[lang][key];
+        el.innerHTML = translations[lang][key];
       }
     }
   });

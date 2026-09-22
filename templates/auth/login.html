@@ -61,18 +61,18 @@
                 <span class="fs-3 fw-bold">AgriConnect</span>
             </a>
             
-            <h1 class="display-5 fw-bold mb-4 mt-5">Empowering farmers, serving buyers</h1>
-            <p class="lead opacity-75 mb-5">Join the most trusted agricultural marketplace in India.</p>
+            <h1 class="display-5 fw-bold mb-4 mt-5"><span data-i18n='auth.slogan'>Empowering farmers, serving buyers</span></h1>
+            <p class="lead opacity-75 mb-5"><span data-i18n='auth.slogan_desc'>Join the most trusted agricultural marketplace in India.</span></p>
             
             <ul class="list-unstyled d-flex flex-column gap-4 mt-4">
                 <li class="d-flex align-items-center gap-3 fs-5">
-                    <i class="bi bi-check-circle-fill text-accent fs-4"></i> Direct farmer-to-buyer connection
+                    <i class="bi bi-check-circle-fill text-accent fs-4"></i> <span data-i18n='auth.feat1'>Direct farmer-to-buyer connection</span>
                 </li>
                 <li class="d-flex align-items-center gap-3 fs-5">
-                    <i class="bi bi-check-circle-fill text-accent fs-4"></i> Live mandi price comparison
+                    <i class="bi bi-check-circle-fill text-accent fs-4"></i> <span data-i18n='auth.feat2'>Live mandi price comparison</span>
                 </li>
                 <li class="d-flex align-items-center gap-3 fs-5">
-                    <i class="bi bi-check-circle-fill text-accent fs-4"></i> Zero commission platform
+                    <i class="bi bi-check-circle-fill text-accent fs-4"></i> <span data-i18n='auth.feat3'>Zero commission platform</span>
                 </li>
             </ul>
         </div>
@@ -85,13 +85,13 @@
     <!-- Right Panel -->
     <div class="auth-right col-12 col-md-7 col-lg-6 d-flex flex-column justify-content-center p-4 p-md-5 bg-white position-relative overflow-y-auto">
         <a href="{{ url_for('index') }}" class="text-muted text-decoration-none position-absolute top-0 start-0 m-4 d-flex align-items-center gap-2 hover-primary transition-all">
-            <i class="bi bi-arrow-left"></i> Back to home
+            <i class="bi bi-arrow-left"></i> <span data-i18n='auth.back'>Back to home</span>
         </a>
         
         <div class="w-100 mx-auto mt-4" style="max-width: 420px;">
             <div class="text-center mb-5">
-                <h2 class="fw-bold text-dark mb-2">Welcome Back</h2>
-                <p class="text-muted">Sign in to your AgriConnect account</p>
+                <h2 class="fw-bold text-dark mb-2"><span data-i18n='auth.welcome'>Welcome Back</span></h2>
+                <p class="text-muted"><span data-i18n='auth.sign_in_desc'>Sign in to your AgriConnect account</span></p>
             </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -126,9 +126,9 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                        <label class="form-check-label text-muted" for="remember">Remember me</label>
+                        <label class="form-check-label text-muted" for="remember"><span data-i18n='auth.remember'>Remember me</span></label>
                     </div>
-                    <a href="#" class="text-primary text-decoration-none small fw-medium">Forgot password?</a>
+                    <a href="#" class="text-primary text-decoration-none small fw-medium"><span data-i18n='auth.forgot'>Forgot password?</span></a>
                 </div>
                 
                 <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm rounded-3 hover-lift">
@@ -137,14 +137,14 @@
             </form>
             
             <p class="text-center text-muted mb-4">
-                Don't have an account? <a href="{{ url_for('signup') }}" class="text-primary fw-bold text-decoration-none">Sign up</a>
+                <span data-i18n='auth.no_account'>Don't have an account?</span> <a href="{{ url_for('signup') }}" class="text-primary fw-bold text-decoration-none">Sign up</a>
             </p>
             
-            <!-- Demo Credentials for Judges -->
+            <!-- <span data-i18n='auth.demo'>Demo Credentials</span> for Judges -->
             <div class="card border-0 bg-success-subtle rounded-4 mt-5 shadow-sm">
                 <div class="card-body p-4">
                     <h6 class="fw-bold text-success mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-info-circle-fill"></i> Demo Credentials
+                        <i class="bi bi-info-circle-fill"></i> <span data-i18n='auth.demo'>Demo Credentials</span>
                     </h6>
                     <div class="d-flex flex-column gap-2 small text-dark font-monospace">
                         <div class="d-flex justify-content-between p-2 bg-white rounded-3 border">

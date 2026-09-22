@@ -100,7 +100,7 @@
     <!-- Right Panel -->
     <div class="auth-right col-12 col-md-7 col-lg-7 offset-md-5 offset-lg-5 d-flex flex-column p-4 p-md-5 bg-white min-vh-100 position-relative">
         <a href="{{ url_for('index') }}" class="text-muted text-decoration-none mb-4 d-flex align-items-center gap-2 hover-primary d-md-none transition-all">
-            <i class="bi bi-arrow-left"></i> Back to home
+            <i class="bi bi-arrow-left"></i> <span data-i18n='auth.back'>Back to home</span>
         </a>
         
         <div class="w-100 mx-auto" style="max-width: 550px;">
@@ -259,7 +259,7 @@
             </form>
             
             <p class="text-center text-muted">
-                Already have an account? <a href="{{ url_for('login') }}" class="text-primary fw-bold text-decoration-none">Log in</a>
+                <span data-i18n='auth.have_account'>Already have an account?</span> <a href="{{ url_for('login') }}" class="text-primary fw-bold text-decoration-none">Log in</a>
             </p>
             
         </div>

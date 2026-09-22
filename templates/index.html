@@ -53,7 +53,7 @@
         <div class="container position-relative z-1">
             <div class="row align-items-center">
                 <div class="col-lg-7 text-center text-lg-start mb-5 mb-lg-0">
-                    <span class="badge bg-light text-primary px-3 py-2 rounded-pill mb-3 fw-semibold shadow-sm animate-on-scroll">🌾 Revolutionizing Indian Agriculture</span>
+                    <span class="badge bg-light text-primary px-3 py-2 rounded-pill mb-3 fw-semibold shadow-sm animate-on-scroll">🌾 <span data-i18n='hero.badge'>Revolutionizing Indian Agriculture</span></span>
                     <h1 class="display-3 fw-bold text-white mb-4 lh-tight animate-on-scroll" data-i18n="hero.title">
                         Farm Fresh,<br><span class="text-accent">Direct to You</span>
                     </h1>
@@ -62,10 +62,10 @@
                     </p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start animate-on-scroll" style="animation-delay: 0.2s;">
                         <a href="{{ url_for('signup', role='farmer') }}" class="btn-farmer d-inline-block text-center text-decoration-none shadow hover-lift">
-                            <i class="bi bi-tree me-2"></i> data-i18n='hero.cta_farmer'>I'm a Farmer
+                            <i class="bi bi-tree me-2"></i><span data-i18n='hero.cta_farmer'>I'm a Farmer</span>
                         </a>
                         <a href="{{ url_for('signup', role='buyer') }}" class="btn-buyer d-inline-block text-center text-decoration-none shadow-sm hover-lift">
-                            <i class="bi bi-cart3 me-2"></i> data-i18n='hero.cta_buyer'>I'm a Buyer
+                            <i class="bi bi-cart3 me-2"></i><span data-i18n='hero.cta_buyer'>I'm a Buyer</span>
                         </a>
                     </div>
                     <div class="mt-4 pt-2 text-light small d-flex align-items-center justify-content-center justify-content-lg-start animate-on-scroll" style="animation-delay: 0.3s;">
@@ -74,7 +74,7 @@
                             <img src="https://ui-avatars.com/api/?name=P+S&background=d4a373&color=fff" class="rounded-circle border border-2 border-white shadow-sm ms-n2" width="32" alt="User">
                             <img src="https://ui-avatars.com/api/?name=M+D&background=52b788&color=fff" class="rounded-circle border border-2 border-white shadow-sm ms-n2" width="32" alt="User">
                         </div>
-                        <span class="fw-medium">Join <strong class="text-white">2,400+</strong> farmers already earning more</span>
+                        <span class="fw-medium"><span data-i18n='hero.join_farmers'>Join <strong class="text-white">2,400+</strong> farmers already earning more</span></span>
                     </div>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block position-relative animate-on-scroll" style="animation-delay: 0.2s;">
@@ -88,8 +88,8 @@
                                 <i class="bi bi-graph-up-arrow fs-4"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0 fw-bold">+35% Profit</h6>
-                                <small class="text-muted">Average farmer increase</small>
+                                <h6 class="mb-0 fw-bold"><span data-i18n='hero.profit_increase'>+35% Profit</span></h6>
+                                <small class="text-muted"><span data-i18n='hero.avg_increase'>Average farmer increase</span></small>
                             </div>
                         </div>
                     </div>
@@ -109,28 +109,28 @@
                     <div class="p-3">
                         <i class="bi bi-people text-primary fs-1 mb-3 d-block"></i>
                         <h2 class="fw-bold text-dark mb-1"><span class="stat-counter" data-target="2487">0</span>+</h2>
-                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_farmers'>Farmers Onboarded</p>
+                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_farmers'><span data-i18n='hero.stat_farmers'>Farmers Onboarded</span></p>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 animate-on-scroll" style="animation-delay: 0.1s;">
                     <div class="p-3">
                         <i class="bi bi-currency-rupee text-primary fs-1 mb-3 d-block"></i>
                         <h2 class="fw-bold text-dark mb-1"><span class="stat-counter" data-target="124">0</span>M+</h2>
-                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_volume'>Trade Volume (₹)</p>
+                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_volume'><span data-i18n='hero.stat_volume'>Trade Volume (₹)</span></p>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 animate-on-scroll" style="animation-delay: 0.2s;">
                     <div class="p-3">
                         <i class="bi bi-basket text-primary fs-1 mb-3 d-block"></i>
                         <h2 class="fw-bold text-dark mb-1"><span class="stat-counter" data-target="48">0</span>+</h2>
-                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_crops'>Crop Varieties</p>
+                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_crops'><span data-i18n='hero.stat_crops'>Crop Varieties</span></p>
                     </div>
                 </div>
                 <div class="col-6 col-md-3 animate-on-scroll" style="animation-delay: 0.3s;">
                     <div class="p-3">
                         <i class="bi bi-geo-alt text-primary fs-1 mb-3 d-block"></i>
                         <h2 class="fw-bold text-dark mb-1"><span class="stat-counter" data-target="22">0</span></h2>
-                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_states'>States Covered</p>
+                        <p class="text-muted fw-medium mb-0">data-i18n='hero.stat_states'><span data-i18n='hero.stat_states'>States Covered</span></p>
                     </div>
                 </div>
             </div>
@@ -176,7 +176,7 @@
                         <div class="bg-earth-subtle text-earth rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mt-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-search fs-1"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">data-i18n='how.step2_title'>Buyer Discovers</h4>
+                        <h4 class="fw-bold mb-3">data-i18n='how.step2_title'><span data-i18n='how.step2_title'>Buyer Discovers</span></h4>
                         <p class="text-muted mb-0">Buyers browse fresh listings, filter by location or crop, and compare with live mandi prices.</p>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                         <div class="bg-accent-subtle text-accent rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mt-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-handshake fs-1"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">data-i18n='how.step3_title'>Direct Deal</h4>
+                        <h4 class="fw-bold mb-3">data-i18n='how.step3_title'><span data-i18n='how.step3_title'>Direct Deal</span></h4>
                         <p class="text-muted mb-0">Secure a deal directly. No hidden fees, no commission agents, just fair trade for everyone.</p>
                     </div>
                 </div>
