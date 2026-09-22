@@ -93,7 +93,7 @@ const translations = {
     'hero.join_farmers': 'Join <strong class="text-white">2,400+</strong> farmers already earning more',
     'hero.profit_increase': '+35% Profit',
     'hero.avg_increase': 'Average farmer increase',
-    'footer.copyright': '© 2024 AgriConnect. All rights reserved.',
+    'footer.copyright': '© 2026 AgriConnect. All rights reserved.',
 
 
     'dash.requests_sent': 'Requests Sent',
