@@ -70,6 +70,26 @@ const translations = {
     'general.location': 'Location',
     'general.status': 'Status',
     'general.date': 'Date',
+
+    'dash.requests_sent': 'Requests Sent',
+    'dash.saved_listings': 'Saved Listings',
+    'dash.active_deals': 'Active Deals',
+    'dash.recent_requests': 'Recent Requests',
+    'dash.view_all': 'View All',
+    'dash.manage_deals': 'Manage deals',
+    'dash.discover_fresh_produce': 'Discover Fresh Produce',
+    'dash.discover_desc': 'Connect directly with farmers across India for the best quality and prices.',
+    'market.discover': 'Discover Marketplace',
+    'market.state_label': 'State',
+    'market.all_states': 'All States',
+    'market.max_price': 'Max Price (₹)',
+    'market.need_more': 'Need more quantity?',
+    'market.combine_desc': 'No single farmer has enough — combine listings to reach your goal.',
+    'market.no_listings': 'No listings found',
+    'market.try_adjusting': 'Try adjusting your filters or search criteria.',
+    'market.filters': 'Filters',
+    'market.total_price': 'Total Price',
+
   },
   hi: {
     // Navbar

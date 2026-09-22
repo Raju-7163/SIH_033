@@ -53,9 +53,7 @@
     <!-- Left Panel -->
     <div class="auth-left col-md-5 col-lg-6 d-none d-md-flex flex-column justify-content-between p-5 text-white position-relative overflow-hidden" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);">
         
-        <!-- Decorative SVG shapes -->
-        <div class="position-absolute rounded-circle bg-white opacity-10" style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(20px);"></div>
-        <div class="position-absolute rounded-circle bg-accent opacity-20" style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(30px);"></div>
+        <!-- Decorative SVG shapes (removed for clarity) -->
         
         <div class="position-relative z-1">
             <a href="{{ url_for('index') }}" class="text-white text-decoration-none d-flex align-items-center gap-2 mb-5">
@@ -109,14 +107,14 @@
 
             <form action="{{ url_for('login') }}" method="POST" class="mb-4">
                 <div class="mb-4">
-                    <label for="email" class="form-label fw-medium">Email Address</label>
+                    <label for="email" class="form-label fw-medium" data-i18n='auth.email'>Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
                         <input type="email" class="form-control bg-light border-start-0 ps-0" id="email" name="email" required placeholder="name@example.com">
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label for="password" class="form-label fw-medium">Password</label>
+                    <label for="password" class="form-label fw-medium" data-i18n='auth.password'>Password</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-muted"></i></span>
                         <input type="password" class="form-control bg-light border-x-0 ps-0" id="password" name="password" required placeholder="••••••••">

@@ -69,9 +69,9 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label fw-medium text-dark small text-uppercase tracking-wider">State</label>
+                    <label class="form-label fw-medium text-dark small text-uppercase tracking-wider" data-i18n="market.state_label">State</label>
                     <select id="state-filter" class="form-select bg-light border-0 shadow-sm">
-                        <option value="all">All States</option>
+                        <option value="all" data-i18n="market.all_states">All States</option>
                         <option value="Maharashtra">Maharashtra</option>
                         <option value="Punjab">Punjab</option>
                         <option value="Uttar Pradesh">Uttar Pradesh</option>
@@ -99,7 +99,7 @@
 
                 <div class="mb-4">
                     <label class="form-label fw-medium text-dark small text-uppercase tracking-wider d-flex justify-content-between">
-                        <span>Max Price (₹)</span>
+                        <span data-i18n="market.max_price">Max Price (₹)</span>
                         <span id="price-display" class="text-primary fw-bold">₹5000</span>
                     </label>
                     <input type="range" id="price-range" class="form-range" min="100" max="10000" step="100" value="10000">
@@ -124,7 +124,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-dark mb-0">Discover Marketplace</h3>
+                <h3 class="fw-bold text-dark mb-0" data-i18n="market.title" data-i18n="market.discover">Discover Marketplace</h3>
                 
                 <!-- View Toggles -->
                 <div class="bg-white rounded-pill shadow-sm border d-inline-flex p-1">
@@ -146,8 +146,8 @@
                             <i class="bi bi-diagram-3-fill"></i>
                         </div>
                         <div>
-                            <h6 class="fw-bold mb-1 text-dark">Need more quantity?</h6>
-                            <p class="mb-0 text-muted small">No single farmer has enough — combine listings to reach your goal.</p>
+                            <h6 class="fw-bold mb-1 text-dark" data-i18n="market.need_more">Need more quantity?</h6>
+                            <p class="mb-0 text-muted small" data-i18n="market.combine_desc">No single farmer has enough — combine listings to reach your goal.</p>
                         </div>
                     </div>
                     <button class="btn btn-primary fw-medium px-4 rounded-pill shadow-sm" id="btn-open-combine-modal">
@@ -165,8 +165,8 @@
                         <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="bi bi-search text-muted fs-1"></i>
                         </div>
-                        <h5 class="fw-bold text-dark">No listings found</h5>
-                        <p class="text-muted">Try adjusting your filters or search criteria.</p>
+                        <h5 class="fw-bold text-dark" data-i18n="market.no_listings">No listings found</h5>
+                        <p class="text-muted" data-i18n="market.try_adjusting">Try adjusting your filters or search criteria.</p>
                         <button class="btn btn-outline-primary px-4 mt-2" onclick="document.getElementById('reset-filters').click()">Clear Filters</button>
                     </div>
                 </div>
@@ -263,7 +263,7 @@
                 </div>
                 
                 <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border mb-2">
-                    <span class="fw-bold text-muted text-uppercase small tracking-wider">Total Price</span>
+                    <span class="fw-bold text-muted text-uppercase small tracking-wider" data-i18n="market.total_price">Total Price</span>
                     <h4 class="mb-0 fw-bold text-success">₹<span id="buy-modal-total">0</span></h4>
                 </div>
             </div>
@@ -306,7 +306,7 @@
                 </div>
                 
                 <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border mb-2">
-                    <span class="fw-bold text-muted text-uppercase small tracking-wider">Total Price</span>
+                    <span class="fw-bold text-muted text-uppercase small tracking-wider" data-i18n="market.total_price">Total Price</span>
                     <h4 class="mb-0 fw-bold text-success">₹<span id="cart-modal-total">0</span></h4>
                 </div>
             </div>

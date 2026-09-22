@@ -65,9 +65,7 @@
     <!-- Left Panel -->
     <div class="auth-left col-md-5 col-lg-5 d-none d-md-flex flex-column justify-content-between p-5 text-white position-fixed h-100 overflow-hidden" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%); z-index: 1;">
         
-        <!-- Decorative SVG shapes -->
-        <div class="position-absolute rounded-circle bg-white opacity-10" style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(20px);"></div>
-        <div class="position-absolute rounded-circle bg-accent opacity-20" style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(30px);"></div>
+        <!-- Decorative SVG shapes (removed for clarity) -->
         
         <div class="position-relative z-1">
             <a href="{{ url_for('index') }}" class="text-white text-decoration-none d-flex align-items-center gap-2 mb-5">
@@ -161,17 +159,17 @@
 
                 <div class="row g-3 mb-3">
                     <div class="col-12">
-                        <label for="name" class="form-label fw-medium">Full Name</label>
+                        <label for="name" class="form-label fw-medium" data-i18n='auth.name'>Full Name</label>
                         <input type="text" class="form-control bg-light" id="name" name="name" required placeholder="e.g. Ramesh Kumar">
                     </div>
                     
                     <div class="col-md-6">
-                        <label for="email" class="form-label fw-medium">Email Address</label>
+                        <label for="email" class="form-label fw-medium" data-i18n='auth.email'>Email Address</label>
                         <input type="email" class="form-control bg-light" id="email" name="email" required placeholder="name@example.com">
                     </div>
                     
                     <div class="col-md-6">
-                        <label for="phone" class="form-label fw-medium">Phone Number</label>
+                        <label for="phone" class="form-label fw-medium" data-i18n='auth.phone'>Phone Number</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted">+91</span>
                             <input type="tel" class="form-control bg-light border-start-0 ps-0" id="phone" name="phone" required placeholder="9876543210" pattern="[0-9]{10}">
@@ -181,7 +179,7 @@
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
-                        <label for="state" class="form-label fw-medium">State</label>
+                        <label for="state" class="form-label fw-medium" data-i18n='auth.state'>State</label>
                         <select class="form-select bg-light" id="state" name="state" required>
                             <option value="" disabled selected>Select State...</option>
                             <option value="Maharashtra">Maharashtra</option>
@@ -205,12 +203,12 @@
                     </div>
                     
                     <div class="col-md-6">
-                        <label for="district" class="form-label fw-medium">District</label>
+                        <label for="district" class="form-label fw-medium" data-i18n='auth.district'>District</label>
                         <input type="text" class="form-control bg-light" id="district" name="district" required placeholder="e.g. Pune">
                     </div>
                     
                     <div class="col-12">
-                        <label for="password" class="form-label fw-medium">Password</label>
+                        <label for="password" class="form-label fw-medium" data-i18n='auth.password'>Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control bg-light border-end-0" id="password" name="password" required placeholder="Create a strong password (min 6 chars)" minlength="6">
                             <button class="btn btn-light border border-start-0" type="button" id="togglePassword">
