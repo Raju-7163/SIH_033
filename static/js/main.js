@@ -146,7 +146,7 @@ function openCartModal() {
             } else {
                 container.innerHTML = data.cart.map(item => `
                     <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom cart-item">
-                        <img src="${item.photo_url}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400'">
+                        <img src="${item.photo_url}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='/static/images/default-crop.jpg'">
                         <div class="flex-grow-1">
                             <h6 class="mb-0 fw-bold">${item.crop_name}</h6>
                             <small class="text-muted">${item.farmer_name}</small>

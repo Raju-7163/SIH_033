@@ -91,7 +91,7 @@ function renderCards() {
         <div class="listing-card card h-100">
           <div class="position-relative">
             <img src="${listing.photo_url}" class="card-img-top" alt="${listing.crop_name}"
-              onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400'">
+              onerror="this.src='/static/images/default-crop.jpg'">
             <span class="position-absolute top-0 end-0 m-2 badge bg-success">${listing.crop_name}</span>
           </div>
           <div class="card-body d-flex flex-column">
@@ -164,7 +164,7 @@ function renderMapPins() {
       .bindPopup(`
         <div class="map-popup">
           <img src="${listing.photo_url}" alt="${listing.crop_name}"
-            onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400'">
+            onerror="this.src='/static/images/default-crop.jpg'">
           <h6 class="mt-2 mb-1">${listing.crop_name}</h6>
           <div><strong>₹${listing.price_per_unit}/${listing.unit}</strong></div>
           <div class="text-muted small">${listing.district}, ${listing.state}</div>

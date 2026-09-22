@@ -341,7 +341,7 @@ def farmer_add_listing():
             harvest_date = datetime.now()
 
         # Handle optional photo upload
-        photo_url = "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400"
+        photo_url = "/static/images/default-crop.jpg"
         if 'photo' in request.files:
             file = request.files['photo']
             if file and file.filename and allowed_file(file.filename):
