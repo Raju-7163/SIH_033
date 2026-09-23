@@ -486,7 +486,7 @@ def farmer_market_prices():
     if avg_price > 0:
         db.price_history.update_one(
             {'crop_name': crop, 'state': state, 'date': today_str},
-            {'': {'price': avg_price}},
+            {'$setOnInsert': {'crop_name': crop, 'state': state, 'price': avg_price, 'date': today_str}},
             upsert=True
         )
     
