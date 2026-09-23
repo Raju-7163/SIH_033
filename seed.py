@@ -116,7 +116,7 @@ def seed_database():
             "district": l["district"],
             "lat": l["lat"],
             "lng": l["lng"],
-            "photo_url": photos.get(l["crop"], photos["Tomato"]),
+            "photo_url": photos.get(l["crop"], "/static/images/no-image.svg"),
             "status": "active",
             "created_at": now
         }
