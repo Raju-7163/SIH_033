@@ -509,15 +509,15 @@ def farmer_market_prices():
                 trend_insight = f"Prices have fallen {abs(trend_pct):.1f}% recently — you may want to wait."
 
     supply_agg = db.listings.aggregate([
-        {'': {'crop_name': crop, 'status': 'active'}},
-        {'': {'_id': None, 'total': {'': ''}}}
+        {'$match': {'crop_name': crop, 'status': 'active'}},
+        {'$group': {'_id': None, 'total': {'$sum': '$quantity'}}}
     ])
     supply_total = list(supply_agg)
     supply_qty = supply_total[0]['total'] if supply_total else 0
     
     req_agg = db.requests.aggregate([
-        {'': {'crop_name': crop, 'status': {'': ['pending', 'accepted']}}},
-        {'': {'_id': None, 'total': {'': ''}}}
+        {'$match': {'crop_name': crop, 'status': {'$in': ['pending', 'accepted']}}},
+        {'$group': {'_id': None, 'total': {'$sum': '$quantity_requested'}}}
     ])
     req_total = list(req_agg)
     demand_qty = req_total[0]['total'] if req_total else 0
