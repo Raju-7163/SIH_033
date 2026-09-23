@@ -3,14 +3,6 @@ const translations = {
   en: {
     // Navbar
     'nav.home': 'Home',
-    'nav.marketplace': 'Marketplace',
-    'nav.listings': 'My Listings',
-    'nav.add_listing': 'Add Listing',
-    'nav.market_prices': 'Market Prices',
-    'nav.requests': 'Requests',
-    'nav.profile': 'Profile',
-    'nav.logout': 'Logout',
-    'nav.saved': 'Saved',
     // Landing
     'hero.title': 'Farm Fresh, Direct to You',
     'hero.subtitle': 'Connecting farmers directly with buyers. No middlemen. Better prices for everyone.',
@@ -70,7 +62,6 @@ const translations = {
     'general.location': 'Location',
     'general.status': 'Status',
     'general.date': 'Date',
-
     'nav.dashboard': 'Dashboard',
     'nav.my_listings': 'My Listings',
     'nav.add_listing': 'Add Listing',
@@ -82,6 +73,15 @@ const translations = {
     'nav.my_requests': 'My Requests',
     'nav.saved': 'Saved',
     'nav.cart': 'My Cart',
+    'nav.logistics_dashboard': 'Dashboard',
+    'nav.logistics_available': 'Available Deliveries',
+    'nav.logistics_my': 'My Deliveries',
+    'nav.collapse_sidebar': 'Collapse Sidebar',
+    'nav.expand_sidebar': 'Expand Sidebar',
+
+
+
+
 
 
     'payment.title': 'Complete Payment',
@@ -150,11 +150,6 @@ const translations = {
     'market.contact_reveal': 'Farmer contact info revealed after acceptance',
     'market.checkout': 'Checkout',
     'market.payment': 'Payment',
-    'nav.collapse_sidebar': 'Collapse Sidebar',
-    'nav.expand_sidebar': 'Expand Sidebar',
-    'nav.logistics_dashboard': 'Dashboard',
-    'nav.logistics_available': 'Available Deliveries',
-    'nav.logistics_my': 'My Deliveries',
     'market.price_per_kg': 'Price / kg',
     'market.price_per_quintal': 'Price / Quintal',
     'market.price_per_tonne': 'Price / Tonne',
@@ -208,14 +203,6 @@ const translations = {
   hi: {
     // Navbar
     'nav.home': 'होम',
-    'nav.marketplace': 'बाज़ार',
-    'nav.listings': 'मेरी लिस्टिंग',
-    'nav.add_listing': 'लिस्टिंग जोड़ें',
-    'nav.market_prices': 'बाज़ार भाव',
-    'nav.requests': 'अनुरोध',
-    'nav.profile': 'प्रोफाइल',
-    'nav.logout': 'लॉगआउट',
-    'nav.saved': 'सहेजे गए',
     // Landing
     'hero.title': 'खेत से सीधे आपके पास',
     'hero.subtitle': 'किसानों को सीधे खरीदारों से जोड़ें। कोई बिचौलिया नहीं। सभी के लिए बेहतर दाम।',
@@ -275,6 +262,25 @@ const translations = {
     'general.location': 'स्थान',
     'general.status': 'स्थिति',
     'general.date': 'तारीख',
+    'nav.dashboard': 'डैशबोर्ड',
+    'nav.my_listings': 'मेरी लिस्टिंग',
+    'nav.add_listing': 'लिस्टिंग जोड़ें',
+    'nav.market_prices': 'बाज़ार भाव',
+    'nav.requests': 'अनुरोध',
+    'nav.profile': 'प्रोफ़ाइल',
+    'nav.logout': 'लॉग आउट',
+    'nav.marketplace': 'बाज़ार ब्राउज़ करें',
+    'nav.my_requests': 'मेरे अनुरोध',
+    'nav.saved': 'सहेजा गया',
+    'nav.cart': 'मेरी कार्ट',
+    'nav.logistics_dashboard': 'डैशबोर्ड',
+    'nav.logistics_available': 'उपलब्ध डिलीवरी',
+    'nav.logistics_my': 'मेरी डिलीवरी',
+    'nav.collapse_sidebar': 'साइडबार छोटा करें',
+    'nav.expand_sidebar': 'साइडबार बड़ा करें',
+
+
+
   }
 };
 

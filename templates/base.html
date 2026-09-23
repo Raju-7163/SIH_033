@@ -16,34 +16,7 @@
 </head>
 <body>
 <script>
-    window.cropImages = {
-    "Tomato": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400",
-    "Wheat": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400",
-    "Onion": "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400",
-    "Rice": "https://images.unsplash.com/photo-1586201375761-83865001e8ac?w=400",
-    "Potato": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400",
-    "Cotton": "https://images.unsplash.com/photo-1592153594892-0b44585141e9?w=400",
-    "Sugarcane": "https://images.unsplash.com/photo-1631584024344-93ff53906a29?w=400",
-    "Mango": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=400",
-    "Maize": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400",
-    "Soybean": "https://images.unsplash.com/photo-1601646271927-4a001fb33f78?w=400",
-    "Mustard": "https://images.unsplash.com/photo-1508595165502-3e2652e5a405?w=400",
-    "Jute": "https://images.unsplash.com/photo-1533604017686-3534b07fb884?w=400",
-    "Banana": "https://images.unsplash.com/photo-1571501679680-a94f6f264be4?w=400",
-    "Coconut": "https://images.unsplash.com/photo-1526614180703-827d23e7c8f2?w=400",
-    "Groundnut": "https://images.unsplash.com/photo-1588667623910-53cc8f5379dd?w=400"
-}
-;
-
-    window.handleImageFallback = function(img, cropName) {
-        if (img.dataset.fallbackTried) return; // prevent infinite loop
-        img.dataset.fallbackTried = "true";
-        if (window.cropImages && window.cropImages[cropName]) {
-            img.src = window.cropImages[cropName];
-        } else {
-            img.src = '/static/images/no-image.svg';
-        }
-    };
+    window.cropImages = {"Wheat": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Vehn%C3%A4pelto_6.jpg/500px-Vehn%C3%A4pelto_6.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Rice": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/20201102.Hengnan.Hybrid_rice_Sanyou-1.6.jpg/500px-20201102.Hengnan.Hybrid_rice_Sanyou-1.6.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Maize": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Zea_mays_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-283.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", "Sugarcane": "https://upload.wikimedia.org/wikipedia/commons/7/74/Saccharum_officinarum_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-125.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", "Cotton": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/CottonPlant.JPG/500px-CottonPlant.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Soybean": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Soybean.USDA.jpg/500px-Soybean.USDA.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Groundnut": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Groundnuts_yield%2C_World%2C_2024_%28cropped%29.svg/500px-Groundnuts_yield%2C_World%2C_2024_%28cropped%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Onion": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Mixed_onions.jpg/500px-Mixed_onions.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Potato": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Patates.jpg/500px-Patates.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Tomato": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/500px-Tomato_je.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Mango": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Mangos_-_single_and_halved.jpg/500px-Mangos_-_single_and_halved.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Banana": "https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", "Coconut": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Cocos_nucifera_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-187.jpg/500px-Cocos_nucifera_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-187.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Jute": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Jute_-_Kolkata_2003-10-31_00538.JPG/500px-Jute_-_Kolkata_2003-10-31_00538.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail", "Mustard": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Mustard_plant_flower.jpg/500px-Mustard_plant_flower.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"};
 </script>
 
 
