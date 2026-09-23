@@ -15,8 +15,6 @@ from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 from functools import wraps
 import config
-import os
-os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 import google.generativeai as genai
 import math
 import os
