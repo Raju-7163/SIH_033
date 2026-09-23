@@ -532,6 +532,8 @@ def farmer_market_prices():
         'trend_pct': round(trend_pct, 1),
         'insight': trend_insight,
         'demand_level': demand_level,
+        'demand_qty': demand_qty,
+        'supply_qty': supply_qty,
         'advisory': None
     }
     
