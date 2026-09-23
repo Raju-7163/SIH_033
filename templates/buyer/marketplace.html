@@ -225,9 +225,9 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
-                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal" data-i18n="general.cancel">Cancel</button>
                 <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-interest-btn">
-                    <i class="bi bi-send me-2"></i> Send Request
+                    <i class="bi bi-send me-2"></i> <span data-i18n="market.send_req_btn">Send Request</span>
                 </button>
             </div>
         </div>
@@ -268,9 +268,9 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
-                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal" data-i18n="general.cancel">Cancel</button>
                 <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-buynow-btn" onclick="submitBuyNow()">
-                    <i class="bi bi-cart-check me-2"></i> Confirm Purchase
+                    <i class="bi bi-cart-check me-2"></i> <span data-i18n="market.confirm_purchase">Confirm Purchase</span>
                 </button>
             </div>
         </div>
@@ -311,7 +311,7 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
-                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal" data-i18n="general.cancel">Cancel</button>
                 <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-cart-btn" onclick="submitAddToCart()">
                     <i class="bi bi-cart-plus me-2"></i> Add to Cart
                 </button>
@@ -335,31 +335,31 @@
                 <div class="alert alert-warning border-0 bg-warning-subtle text-warning-emphasis d-flex align-items-center mb-4 rounded-3 d-none" id="combine-partial-warning">
                     <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
                     <div>
-                        <p class="mb-0 small fw-medium">We couldn't find enough active listings to fully cover your requested quantity. Showing the best available combination.</p>
+                        <p class="mb-0 small fw-medium"><span data-i18n='market.pooled_warning'>We couldn't find enough active listings to fully cover your requested quantity. Showing the best available combination.</span></p>
                     </div>
                 </div>
 
                 <div class="mb-4 d-flex justify-content-between align-items-end bg-light p-3 rounded-3 border">
                     <div>
-                        <p class="mb-1 text-muted small text-uppercase tracking-wider fw-bold">Target Quantity</p>
+                        <p class="mb-1 text-muted small text-uppercase tracking-wider fw-bold" data-i18n="market.target_qty">Target Quantity</p>
                         <h4 class="mb-0 fw-bold text-dark"><span id="combine-target-qty">0</span> units</h4>
                     </div>
                     <div class="text-end">
-                        <p class="mb-1 text-muted small text-uppercase tracking-wider fw-bold">Total Estimated Cost</p>
+                        <p class="mb-1 text-muted small text-uppercase tracking-wider fw-bold" data-i18n="market.total_est_cost">Total Estimated Cost</p>
                         <h4 class="mb-0 fw-bold text-success">₹<span id="combine-total-cost">0</span></h4>
                     </div>
                 </div>
                 
-                <h6 class="fw-bold mb-3">Selected Farmers (<span id="combine-farmer-count">0</span>)</h6>
+                <h6 class="fw-bold mb-3" data-i18n="market.selected_farmers">Selected Farmers (<span id="combine-farmer-count">0</span>)</h6>
                 <div id="combine-listings-container" class="d-flex flex-column gap-3 mb-4 max-h-300 overflow-y-auto pr-2">
                     <!-- Populated by JS -->
                 </div>
                 
             </div>
             <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
-                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-light px-4 fw-medium" data-bs-dismiss="modal" data-i18n="general.cancel">Cancel</button>
                 <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm" id="submit-combine-btn">
-                    <i class="bi bi-send me-2"></i> Send Pooled Request
+                    <i class="bi bi-send me-2"></i> <span data-i18n="market.send_pooled_req">Send Pooled Request</span>
                 </button>
             </div>
         </div>

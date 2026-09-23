@@ -4,7 +4,8 @@ Main Flask application with all routes, authentication, and API endpoints.
 """
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
-import os, bcrypt, requests as http_requests, json, uuid
+import os
+import json, bcrypt, requests as http_requests, json, uuid
 import certifi
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
@@ -17,6 +18,15 @@ import config
 from seed import seed_database
 
 # ── App Initialization ──────────────────────────────────────────────────────
+
+# Load crop images mapping
+crop_images_map = {}
+try:
+    with open('static/data/crop_images.json', 'r', encoding='utf-8') as f:
+        crop_images_map = json.load(f)
+except Exception as e:
+    print("Warning: Could not load crop_images.json", e)
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config.SECRET_KEY
 app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
@@ -341,7 +351,7 @@ def farmer_add_listing():
             harvest_date = datetime.now()
 
         # Handle optional photo upload
-        photo_url = "/static/images/default-crop.jpg"
+        photo_url = crop_images_map.get(crop_name, "/static/images/no-image.svg")
         if 'photo' in request.files:
             file = request.files['photo']
             if file and file.filename and allowed_file(file.filename):

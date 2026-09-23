@@ -131,7 +131,7 @@
                                 {% if req.status == 'accepted' and req.farmer_phone %}
                                 <div class="bg-success-subtle rounded-3 p-3 mb-3 border border-success-subtle">
                                     <p class="fw-bold small text-success-emphasis mb-1">
-                                        <i class="bi bi-telephone-fill me-1"></i> Farmer Contact (Revealed)
+                                        <i class="bi bi-telephone-fill me-1"></i> <span data-i18n="market.contact_revealed">Farmer Contact (Revealed)</span>
                                     </p>
                                     <p class="mb-0 small text-dark">
                                         <strong>{{ req.farmer_name }}</strong> &bull;
@@ -143,7 +143,7 @@
                                 {% elif req.status == 'pending' %}
                                 <div class="bg-light rounded-3 p-3 mb-3 border border-dashed text-muted small d-flex align-items-center gap-2">
                                     <i class="bi bi-lock text-muted"></i>
-                                    Farmer contact revealed after acceptance.
+                                    <span data-i18n="market.contact_reveal_msg">Farmer contact revealed after acceptance.</span>
                                 </div>
                                 {% endif %}
 
@@ -154,7 +154,7 @@
                                         <!-- Pay Now Button -->
                                         <button class="btn btn-success w-100 fw-bold rounded-pill shadow-sm mt-1 py-2"
                                                 onclick="openPayModal('{{ req.order_id }}', '{{ req.crop_name }}', {{ req.total_amount }})">
-                                            <i class="bi bi-credit-card me-2"></i>Pay ₹{{ req.total_amount }} Now
+                                            <i class="bi bi-credit-card me-2"></i><span data-i18n="payment.pay_now">Pay</span> ₹{{ req.total_amount }} <span data-i18n="market.buy_now">Now</span>
                                         </button>
                                         {% elif req.payment_status == 'paid' %}
                                         <!-- Paid + Delivery Status -->
@@ -228,7 +228,7 @@
 
                 <!-- Mock payment fields -->
                 <div class="mb-3">
-                    <label class="form-label fw-medium small">Payment Method</label>
+                    <label class="form-label fw-medium small" data-i18n="payment.method">Payment Method</label>
                     <select class="form-select form-select-sm rounded-pill border-success">
                         <option>UPI (PhonePe / GPay / BHIM)</option>
                         <option>Credit / Debit Card</option>
@@ -238,7 +238,7 @@
                 <div class="mb-4">
                     <label class="form-label fw-medium small">UPI ID / Card Number</label>
                     <input type="text" class="form-control rounded-pill border-success"
-                           placeholder="e.g. yourname@upi or 4242 4242 4242 4242"
+                           data-i18n="payment.upi" placeholder="e.g. yourname@upi or 4242 4242 4242 4242"
                            id="mock-payment-input" value="demo@upi">
                     <div class="form-text text-muted"><i class="bi bi-info-circle me-1"></i>Any value accepted — this is a demo.</div>
                 </div>
@@ -249,7 +249,7 @@
                 <!-- Pay button -->
                 <button class="btn btn-success w-100 fw-bold rounded-pill py-3 shadow-sm"
                         id="pay-submit-btn" onclick="submitPayment()">
-                    <i class="bi bi-lock-fill me-2"></i>Pay <span id="pay-btn-amount">₹0</span>
+                    <i class="bi bi-lock-fill me-2"></i><span data-i18n="payment.pay_btn">Pay</span> <span id="pay-btn-amount">₹0</span>
                 </button>
             </div>
         </div>

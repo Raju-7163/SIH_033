@@ -1,0 +1,5 @@
+﻿<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' fill='#f8f9fa'>
+    <rect width='400' height='300' fill='#e9ecef'/>
+    <path fill='#adb5bd' d='M150 100 A 30 30 0 1 1 150 160 A 30 30 0 1 1 150 100 M80 250 L180 130 L250 200 L280 170 L350 250 Z' />
+    <text x='200' y='275' font-family='sans-serif' font-size='16' fill='#6c757d' text-anchor='middle'>No Image Available</text>
+</svg>

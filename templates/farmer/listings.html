@@ -52,7 +52,7 @@
                     <!-- Image -->
                     <div class="ratio ratio-4x3 bg-light position-relative">
                         {% if listing.photo_url %}
-                            <img src="{{ listing.photo_url }}" class="card-img-top object-fit-cover" alt="{{ listing.crop_name }}" onerror="this.src='/static/images/fallback-crop.jpg'">
+                            <img src="{{ listing.photo_url }}" class="card-img-top object-fit-cover" alt="{{ listing.crop_name }}" onerror="window.handleImageFallback(this, '{{ listing.crop_name }}')">
                         {% else %}
                             <div class="d-flex align-items-center justify-content-center w-100 h-100 text-muted">
                                 <i class="bi bi-image fs-1 opacity-50"></i>

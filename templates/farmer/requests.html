@@ -63,7 +63,7 @@
                                         {% if req.status == 'accepted' and req.buyer_phone %}
                                             <p class="text-primary small fw-medium mb-0"><i class="bi bi-telephone-fill me-1"></i><a href="tel:{{ req.buyer_phone }}" class="text-primary text-decoration-none">{{ req.buyer_phone }}</a></p>
                                         {% else %}
-                                            <p class="text-muted small mb-0"><i class="bi bi-lock-fill me-1"></i>Contact revealed on accept</p>
+                                            <p class="text-muted small mb-0"><i class="bi bi-lock-fill me-1"></i><span data-i18n="market.contact_reveal_short">Contact revealed on accept</span></p>
                                         {% endif %}
                                     </div>
                                 </div>

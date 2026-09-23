@@ -221,17 +221,17 @@
                 <!-- Aadhaar field — for KYC demo. Only last 4 digits + hash stored in DB. -->
                 <div class="col-12 mb-3">
                     <label for="aadhaar" class="form-label fw-medium">
-                        Aadhaar Number
-                        <span class="text-muted fw-normal small">(for KYC verification)</span>
+                        <span data-i18n="auth.aadhaar_label">Aadhaar Number</span>
+                        <span class="text-muted fw-normal small"><span data-i18n="auth.aadhaar_kyc">(for KYC verification)</span></span>
                     </label>
                     <input type="text" class="form-control bg-light" id="aadhaar" name="aadhaar"
-                           required placeholder="Enter 12-digit Aadhaar number"
+                           required placeholder="" data-i18n="auth.aadhaar_placeholder" placeholder="Enter 12-digit Aadhaar number"
                            pattern="[0-9]{12}" maxlength="12" inputmode="numeric">
                     <div class="form-text text-muted">
                         <i class="bi bi-shield-lock me-1"></i>
-                        Only the last 4 digits are stored. Your full number is never saved.
+                        <span data-i18n="auth.aadhaar_help">Only the last 4 digits are stored. Your full number is never saved.</span>
                     </div>
-                    <div class="invalid-feedback">Please enter a valid 12-digit Aadhaar number.</div>
+                    <div class="invalid-feedback"><span data-i18n="auth.aadhaar_invalid">Please enter a valid 12-digit Aadhaar number.</span></div>
                 </div>
 
                 <!-- Exact Location (Leaflet Picker) -->
