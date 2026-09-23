@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 filepath = 'templates/base.html'
 with open(filepath, 'r', encoding='utf-8') as f:

@@ -71,6 +71,19 @@ const translations = {
     'general.status': 'Status',
     'general.date': 'Date',
 
+    'nav.dashboard': 'Dashboard',
+    'nav.my_listings': 'My Listings',
+    'nav.add_listing': 'Add Listing',
+    'nav.market_prices': 'Market Prices',
+    'nav.requests': 'Requests',
+    'nav.profile': 'Profile',
+    'nav.logout': 'Logout',
+    'nav.marketplace': 'Browse Marketplace',
+    'nav.my_requests': 'My Requests',
+    'nav.saved': 'Saved',
+    'nav.cart': 'My Cart',
+
+
     'payment.title': 'Complete Payment',
     'payment.demo_desc': 'Demo Payment - No real transaction',
     'payment.method': 'Payment Method',

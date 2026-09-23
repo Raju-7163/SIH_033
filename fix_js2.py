@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 filepath = 'static/js/marketplace.js'
 with open(filepath, 'r', encoding='utf-8') as f:

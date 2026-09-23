@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 files_to_patch = {
     'templates/buyer/dashboard.html': [

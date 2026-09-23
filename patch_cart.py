@@ -1,4 +1,4 @@
-﻿import os
+import os
 import re
 
 tf = 'static/js/translations.js'

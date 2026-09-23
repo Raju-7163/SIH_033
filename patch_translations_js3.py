@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 tf = 'static/js/translations.js'
 with open(tf, 'r', encoding='utf-8') as f:

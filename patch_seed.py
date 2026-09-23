@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 with open('seed.py', 'r', encoding='utf-8') as f:
     content = f.read()

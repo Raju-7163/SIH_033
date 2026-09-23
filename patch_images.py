@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 replacements = {
     'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80': '/static/images/hero-farmer.jpg',

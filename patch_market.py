@@ -1,4 +1,4 @@
-﻿import os
+import os
 filepath = 'templates/buyer/marketplace.html'
 with open(filepath, 'r', encoding='utf-8') as f:
     content = f.read()

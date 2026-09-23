@@ -1,4 +1,4 @@
-﻿import os
+import os
 import urllib.request
 
 os.makedirs('static/images', exist_ok=True)

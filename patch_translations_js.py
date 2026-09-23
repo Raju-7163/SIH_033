@@ -1,4 +1,4 @@
-﻿import os
+import os
 import re
 
 # Add missing translations to translations.js
