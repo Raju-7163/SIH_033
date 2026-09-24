@@ -1,5 +1,5 @@
 """
-AgriConnect - Farmer to Buyer Marketplace
+FarmLink AI - Farmer to Buyer Marketplace
 Main Flask application with all routes, authentication, and API endpoints.
 """
 
@@ -46,7 +46,7 @@ try:
     try:
         db = client.get_default_database()
     except Exception:
-        db = client['agriconnect']
+        db = client['farmlinkai']
     print("[OK] Connected to MongoDB -- database: " + db.name)
 except Exception as conn_err:
     print("[ERROR] MongoDB connection failed: " + str(conn_err))

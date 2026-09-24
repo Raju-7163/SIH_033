@@ -13,7 +13,7 @@ const translations = {
     'hero.stat_crops': 'Crop Varieties',
     'hero.stat_states': 'States Covered',
     // How it works
-    'how.title': 'How AgriConnect Works',
+    'how.title': 'How FarmLink AI Works',
     'how.step1_title': 'Farmer Lists Produce',
     'how.step1_desc': 'Farmers upload their harvest details, quantity, and asking price.',
     'how.step2_title': 'Buyer Discovers',
@@ -161,12 +161,12 @@ const translations = {
     'auth.feat2': 'Live mandi price comparison',
     'auth.feat3': 'Zero commission platform',
     'auth.welcome': 'Welcome Back',
-    'auth.sign_in_desc': 'Sign in to your AgriConnect account',
+    'auth.sign_in_desc': 'Sign in to your FarmLink AI account',
     'auth.remember': 'Remember me',
     'auth.forgot': 'Forgot password?',
     'auth.no_account': 'Don\'t have an account?',
     'auth.create': 'Create an Account',
-    'auth.join_today': 'Join AgriConnect today',
+    'auth.join_today': 'Join FarmLink AI today',
     'auth.have_account': 'Already have an account?',
     'auth.back': 'Back to home',
     'auth.demo': 'Demo Credentials',
@@ -177,7 +177,7 @@ const translations = {
     'hero.join_farmers': 'Join <strong class="text-white">2,400+</strong> farmers already earning more',
     'hero.profit_increase': '+35% Profit',
     'hero.avg_increase': 'Average farmer increase',
-    'footer.copyright': '© 2026 AgriConnect. All rights reserved.',
+    'footer.copyright': '© 2026 FarmLink AI. All rights reserved.',
 
 
     'dash.requests_sent': 'Requests Sent',
@@ -213,7 +213,7 @@ const translations = {
     'hero.stat_crops': 'फसल किस्में',
     'hero.stat_states': 'राज्य',
     // How it works
-    'how.title': 'AgriConnect कैसे काम करता है',
+    'how.title': 'FarmLink AI कैसे काम करता है',
     'how.step1_title': 'किसान उपज सूचीबद्ध करें',
     'how.step1_desc': 'किसान अपनी फसल की जानकारी, मात्रा और मूल्य अपलोड करते हैं।',
     'how.step2_title': 'खरीदार खोजें',
@@ -285,12 +285,12 @@ const translations = {
 };
 
 // Current language state
-let currentLang = localStorage.getItem('agriconnect_lang') || 'en';
+let currentLang = localStorage.getItem('farmlinkai_lang') || 'en';
 
 // Apply translations to all elements with data-i18n attribute
 function applyTranslations(lang) {
   currentLang = lang;
-  localStorage.setItem('agriconnect_lang', lang);
+  localStorage.setItem('farmlinkai_lang', lang);
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) {

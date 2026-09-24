@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Export configurations
-MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/agriconnect')
+MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/farmlinkai')
 DATA_GOV_API_KEY = os.getenv('DATA_GOV_API_KEY', 'your-api-key-here')
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-this-to-a-random-secret')
 UPLOAD_FOLDER = 'static/uploads'

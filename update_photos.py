@@ -5,7 +5,7 @@ client = MongoClient(config.MONGO_URI)
 try:
     db = client.get_default_database()
 except:
-    db = client['agriconnect']
+    db = client['farmlinkai']
 
 photos = {
     'Tomato': 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400',

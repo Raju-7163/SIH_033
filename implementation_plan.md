@@ -1,4 +1,4 @@
-# AgriConnect Improvements Implementation Plan
+# FarmLink AI Improvements Implementation Plan
 
 ## Goal Description
 Fix existing UI/UX bugs in the Farmer dashboard (My Listings buttons and Market Prices graph) and Buyer marketplace (Card layouts). Add dynamic inventory deduction upon order acceptance. Extend the logistics data model and UI to capture and display precise GPS coordinates (lat/lng) using Leaflet.js maps.

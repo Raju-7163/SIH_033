@@ -12,7 +12,7 @@ def seed_database():
     try:
         db = client.get_default_database()   # Uses DB name from URI
     except Exception:
-        db = client['agriconnect']           # Fallback
+        db = client['farmlinkai']           # Fallback
 
     # Check if database is already seeded (idempotent)
     if db.users.count_documents({}) > 0:

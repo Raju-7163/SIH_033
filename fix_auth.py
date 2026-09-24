@@ -9,7 +9,7 @@ content = content.replace("Direct farmer-to-buyer connection", "<span data-i18n=
 content = content.replace("Live mandi price comparison", "<span data-i18n='auth.feat2'>Live mandi price comparison</span>")
 content = content.replace("Zero commission platform", "<span data-i18n='auth.feat3'>Zero commission platform</span>")
 content = content.replace("Welcome Back", "<span data-i18n='auth.welcome'>Welcome Back</span>")
-content = content.replace("Sign in to your AgriConnect account", "<span data-i18n='auth.sign_in_desc'>Sign in to your AgriConnect account</span>")
+content = content.replace("Sign in to your FarmLink AI account", "<span data-i18n='auth.sign_in_desc'>Sign in to your FarmLink AI account</span>")
 content = content.replace("Remember me", "<span data-i18n='auth.remember'>Remember me</span>")
 content = content.replace("Forgot password?", "<span data-i18n='auth.forgot'>Forgot password?</span>")
 content = content.replace("Don't have an account?", "<span data-i18n='auth.no_account'>Don't have an account?</span>")
@@ -29,7 +29,7 @@ content = content.replace("Direct farmer-to-buyer connection", "<span data-i18n=
 content = content.replace("Live mandi price comparison", "<span data-i18n='auth.feat2'>Live mandi price comparison</span>")
 content = content.replace("Zero commission platform", "<span data-i18n='auth.feat3'>Zero commission platform</span>")
 content = content.replace("Create an Account", "<span data-i18n='auth.create'>Create an Account</span>")
-content = content.replace("Join AgriConnect today", "<span data-i18n='auth.join_today'>Join AgriConnect today</span>")
+content = content.replace("Join FarmLink AI today", "<span data-i18n='auth.join_today'>Join FarmLink AI today</span>")
 content = content.replace("Already have an account?", "<span data-i18n='auth.have_account'>Already have an account?</span>")
 content = content.replace("Back to home", "<span data-i18n='auth.back'>Back to home</span>")
 
@@ -47,12 +47,12 @@ en_adds = """
     'auth.feat2': 'Live mandi price comparison',
     'auth.feat3': 'Zero commission platform',
     'auth.welcome': 'Welcome Back',
-    'auth.sign_in_desc': 'Sign in to your AgriConnect account',
+    'auth.sign_in_desc': 'Sign in to your FarmLink AI account',
     'auth.remember': 'Remember me',
     'auth.forgot': 'Forgot password?',
     'auth.no_account': 'Don\\'t have an account?',
     'auth.create': 'Create an Account',
-    'auth.join_today': 'Join AgriConnect today',
+    'auth.join_today': 'Join FarmLink AI today',
     'auth.have_account': 'Already have an account?',
     'auth.back': 'Back to home',
     'auth.demo': 'Demo Credentials',

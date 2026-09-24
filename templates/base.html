@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AgriConnect{% endblock %} | AgriConnect</title>
+    <title>{% block title %}FarmLink AI{% endblock %} | FarmLink AI</title>
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -24,7 +24,7 @@
         <div class="sidebar-brand">
             <a href="{% if session.get('role') == 'farmer' %}{{ url_for('farmer_dashboard') }}{% elif session.get('role') == 'logistics' %}{{ url_for('logistics_dashboard') }}{% else %}{{ url_for('buyer_dashboard') }}{% endif %}" class="text-decoration-none text-white d-flex align-items-center gap-2">
                 <i class="bi bi-tree-fill fs-3 text-accent"></i>
-                <span class="fw-bold fs-4">AgriConnect</span>
+                <span class="fw-bold fs-4">FarmLink AI</span>
             </a>
         </div>
         <ul class="nav flex-column sidebar-nav mt-4">
@@ -196,7 +196,7 @@
         {% block content %}{% endblock %}
         
         <footer class="content-footer mt-5 pt-4 border-top text-center text-muted">
-            <small>&copy; 2026 AgriConnect. All rights reserved.</small>
+            <small>&copy; 2026 FarmLink AI. All rights reserved.</small>
         </footer>
     </div>
 
