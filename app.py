@@ -183,8 +183,12 @@ def signup():
         except ValueError:
             lat, lng = 0.0, 0.0
 
-        if db.users.find_one({"email": email}):
-            flash("Email already registered.", "error")
+        try:
+            if db.users.find_one({"email": email}):
+                flash("Email already registered.", "error")
+                return redirect(url_for('signup'))
+        except Exception as e:
+            flash("Database connection failed. Please check your internet or whitelist your IP in MongoDB Atlas.", "error")
             return redirect(url_for('signup'))
 
         # --- Aadhaar KYC handling ---
